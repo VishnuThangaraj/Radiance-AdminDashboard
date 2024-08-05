@@ -1,0 +1,188 @@
+.display-area {
+  padding: 20px;
+}
+
+/* Title styling */
+.content-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Flex container for title and utility buttons */
+.content-title-holder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Flex row styling */
+.my-flex-row {
+  display: flex;
+  align-items: center;
+}
+
+/* Utility holder styling */
+.utility-holder {
+  display: flex;
+  gap: 10px;
+}
+
+/* Utility button styling */
+.utl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+/* Container for the table */
+.member-table-holder {
+  margin-top: 20px;
+  padding: 20px;
+  min-height: 450px;
+  max-height: 450px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  border-radius: 2%/4%;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+/* Hide scrollbar for other browsers */
+.table-wrapper {
+  -ms-overflow-style: none; /* Internet Explorer and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Ensure the table takes full width and collapses borders */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  border-radius: 5%;
+}
+
+/* Style for table headers and cells */
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+th {
+  background-color: #f9f9f9;
+  font-weight: 600;
+  color: #333;
+  position: sticky;
+  top: 0;
+}
+
+/* Style for alternating row colors */
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Hover effect for table rows */
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Button styling */
+.btn {
+  border: none;
+  padding: 7px 16px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Button outline styling */
+.btn-outline-info {
+  background-color: #e2effd;
+  color: #1572e9;
+}
+
+.btn-outline-info:hover {
+  background-color: #1572e9;
+  color: #fff;
+}
+
+/* Small button styling */
+.btn-sm {
+  font-size: 14px;
+  padding: 5px 10px;
+}
+
+/* Margin-left utility class */
+.ml-2 {
+  margin-left: 5px;
+}
+
+/* Add Member button styling */
+#add_mbr_btn {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+#add_mbr_btn:hover {
+  background-color: #45a049;
+}
+
+/* Active row styling */
+.expanded-actions {
+  display: flex;
+  align-items: center;
+}
+
+.default-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* Active button styling */
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Deletion animation */
+.fade-slide-remove {
+  animation: fadeSlideRemove 0.5s forwards;
+}
+
+/* Keyframes for fade and slide up animation */
+@keyframes fadeSlideRemove {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px); /* Adjust slide distance as needed */
+  }
+}

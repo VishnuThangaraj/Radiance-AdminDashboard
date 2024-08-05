@@ -1,0 +1,83 @@
+/* EditMemberForm.css */
+
+.edit-member-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.edit-member-form {
+  background: #ffffffee;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 400px;
+  height: 100%;
+  max-width: 100%;
+}
+
+.edit-member-form #editmbr-title {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  font-weight: 600;
+  padding-bottom: 10px;
+  z-index: 1000;
+}
+
+.edit-member-form-label {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.edit-member-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.edit-member-form input,
+.edit-member-form select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5%/40%;
+  margin-bottom: 8px;
+  margin-top: 5px;
+}
+
+.edit-member-form-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.edit-member-close-btn {
+  background: none;
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-member-save-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.sm-btn-edit {
+  border-radius: 15%/50%;
+}

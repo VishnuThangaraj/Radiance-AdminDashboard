@@ -1,0 +1,101 @@
+/* Main display area */
+#endoftheday.display-area {
+  padding: 20px;
+}
+
+/* Title styling */
+#endoftheday h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Container for the table */
+#endoftheday .table-holder2 {
+  margin-top: 20px;
+  padding: 20px;
+  min-height: 450px;
+  max-height: 450px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  border-radius: 2%/4%;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+#endoftheday .table-wrapper2 {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+#endoftheday .table-wrapper2::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+/* Hide scrollbar for other browsers */
+#endoftheday .table-wrapper2 {
+  -ms-overflow-style: none; /* Internet Explorer and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Ensure the table takes full width and collapses borders */
+#endoftheday table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+}
+
+/* Style for table headers and cells */
+#endoftheday th,
+#endoftheday td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+#endoftheday th {
+  background-color: #f9f9f9;
+  font-weight: 600;
+  color: #333;
+  position: sticky;
+  top: 0;
+  z-index: 1; /* Ensure the header is above the scrollable content */
+}
+
+/* Style for alternating row colors */
+#endoftheday tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Hover effect for table rows */
+#endoftheday tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Button styling */
+#endoftheday .submit-button {
+  border: none;
+  padding: 7px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: #4caf50;
+  color: #fff;
+}
+
+#endoftheday .submit-button:hover {
+  background-color: #45a049;
+}
+
+/* Error message styling */
+#endoftheday .error {
+  color: #dc3545;
+  margin-bottom: 20px;
+}
+.total_work_hours {
+  font-size: 18px;
+  font-weight: 600;
+}

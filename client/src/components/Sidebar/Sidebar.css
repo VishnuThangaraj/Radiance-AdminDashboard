@@ -1,0 +1,81 @@
+#sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 220px;
+  background-color: #191c25fb;
+  /* background-color: #1a2036; */
+  color: white;
+  box-sizing: border-box;
+  border-top-right-radius: 2%;
+  border-bottom-right-radius: 2%;
+  box-shadow: 2px 4px 4px grey;
+}
+
+.sidebar_logo_holder {
+  padding: 10% 5%;
+}
+
+.sidebar_brand {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+}
+
+.sidbar_menu {
+  height: 40px;
+  background-color: #151b2b;
+}
+
+.role_area {
+  display: flex;
+  padding: 6px 0 0 10px;
+  align-items: center;
+}
+
+.sidebar_navigation {
+  color: #73778f;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8% 6%;
+}
+
+.sidebar-content {
+  font-size: 15px;
+}
+
+.logo_holder {
+  background-color: red;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+.sidebar-content {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.icon-container {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: #2a2e3a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.menu-label {
+  color: #fff;
+  font-size: 1rem;
+}
+
+.logout-user {
+  position: fixed;
+  bottom: 10px;
+  left: 50px;
+}

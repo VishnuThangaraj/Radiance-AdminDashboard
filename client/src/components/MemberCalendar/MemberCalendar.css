@@ -1,0 +1,86 @@
+#member_calendar {
+  padding: 20px;
+  background-color: #f0f2f5;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#member_calendar .header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Content container for MemberCalendar */
+#member_calendar .content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Style for calendar holder */
+#member_calendar .calendar-holder {
+  background-color: #fff;
+  padding: 10px;
+  width: 1050px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific style for date cells in the calendar */
+#member_calendar .date-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 5px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Style for the content within each date cell */
+#member_calendar .date-content {
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container for buttons in each date cell */
+#member_calendar .buttons {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+}
+
+/* Style for buttons in MemberCalendar */
+#member_calendar .btn {
+  background-color: #6f48eb;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-top: 5px;
+  width: 100%;
+  border-radius: 25% /55%;
+  text-align: center;
+  border: 1px solid #6f48eb;
+}
+
+/* Disabled button style */
+#member_calendar .btn:disabled {
+  background-color: rgba(0, 0, 0, 0.541);
+  border: 1px solid rgba(0, 0, 0, 0.548);
+  cursor: not-allowed;
+}
+
+/* Green button style */
+#member_calendar .btn-green {
+  background-color: #32cf36;
+  border: 1px solid #27a72b;
+}
+.date-cell {
+  border-right: 1px solid #8a959f71;
+}

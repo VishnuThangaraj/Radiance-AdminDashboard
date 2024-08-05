@@ -1,0 +1,106 @@
+#navbar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 65px;
+  width: 83.9%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: white;
+  color: black;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-left {
+  flex: 1;
+}
+
+.search-container {
+  position: relative;
+  max-width: 400px;
+  width: 100%;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 4px 30px 4px 12px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  outline: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  cursor: pointer;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.icon {
+  margin: 0 10px;
+  cursor: pointer;
+  color: #8b959f;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer; /* Indicate that the profile pic is clickable */
+}
+
+.profile-name {
+  font-size: 16px;
+  color: #333; /* Text color matching the profile menu */
+  cursor: pointer; /* Indicate that the name is clickable */
+}
+
+.profile-menu {
+  position: absolute;
+  top: 53px;
+  right: 0;
+  background-color: white;
+  color: #333;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: none;
+  width: 150px;
+}
+
+.profile-menu.open {
+  display: block;
+}
+
+.profile-menu-item {
+  display: block;
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  z-index: 50055;
+}
+
+.profile-menu-item:hover {
+  background-color: #f0f0f0; /* Highlight on hover */
+}
