@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const SubscriptionSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  start_date: { type: Date, required: true },
+  start_date: { type: Date, required: true, default: Date.now },
   end_date: { type: Date, required: true },
   member_id: {
     type: mongoose.Schema.Types.ObjectId,

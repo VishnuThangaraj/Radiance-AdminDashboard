@@ -24,94 +24,77 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <section
-      className="ftco-section"
-      style={{
-        backgroundImage: `url('/images/background.jpg')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundAttachment: "fixed",
-        width: "100%",
-        paddingBottom: "140px",
-      }}
-    >
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-md-6 text-center mb-5">
-            <h2 className="heading-section">RADIANCE YOGA CENTER</h2>
-          </div>
-        </div>
-        <div className="row justify-content-center">
-          <div className="col-md-6 col-lg-4">
-            <div className="login-wrap p-0">
-              <form onSubmit={handleSubmit} className="signin-form">
-                {error && <p className="error-message">{error}</p>}
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                    aria-label="Username"
+    <section className="vh-100 form-back">
+      <div className="container h-100">
+        <div className="row d-flex justify-content-center  align-items-center h-100">
+          <div className="col col-xl-10">
+            <div className="card" style={{ borderRadius: "1rem" }}>
+              <div className="row g-0">
+                <div className="col-md-6 col-lg-5 d-none d-md-block">
+                  <img
+                    src="images/login.jpg"
+                    alt="login form"
+                    className="img-fluid"
+                    style={{ borderRadius: "1rem 0 0 1rem" }}
                   />
                 </div>
-                <div className="form-group">
-                  <input
-                    id="password-field"
-                    type={showPassword ? "text" : "password"}
-                    className="form-control"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    aria-label="Password"
-                  />
-                  <span
-                    onClick={() => setShowPassword(!showPassword)}
-                    className={`fa fa-fw ${
-                      showPassword ? "fa-eye" : "fa-eye-slash"
-                    } field-icon`}
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
-                  ></span>
-                </div>
-                <div className="form-group">
-                  <button
-                    type="submit"
-                    className="form-control btn btn-primary submit px-3"
-                  >
-                    Sign In
-                  </button>
-                </div>
-                <div className="form-group d-md-flex">
-                  <div className="w-50">
-                    <label className="checkbox-wrap checkbox-primary">
-                      Remember Me
-                      <input type="checkbox" defaultChecked />
-                      <span className="checkmark"></span>
-                    </label>
+                <div className="col-md-6 col-lg-7 d-flex align-items-center">
+                  <div className="card-body p-4 pb-0 text-black">
+                    <form onSubmit={handleSubmit}>
+                      {error && (
+                        <p className="error-message make-red">{error}</p>
+                      )}
+                      <div className="d-flex align-items-center mb-3 pb-1">
+                        <img src="images/logo.png" className="me-4" />
+                        <span className="h1 fw-bold mb-0">Radiance</span>
+                      </div>
+                      <h5
+                        className="fw-normal mb-3 pb-3"
+                        style={{ letterSpacing: "1px" }}
+                      >
+                        Sign into your account
+                      </h5>
+                      <div className="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="form2Example17"
+                          className="form-controls form-control-lg"
+                          placeholder="Username"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          required
+                          aria-label="Username"
+                        />
+                      </div>
+                      <div className="form-outline mb-4">
+                        <input
+                          id="password-field"
+                          type={showPassword ? "text" : "password"}
+                          className="form-controls form-control-lg"
+                          placeholder="Password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                          aria-label="Password"
+                        />
+                      </div>
+                      <div className="pt-1 mb-4">
+                        <button type="submit" className="btn btn-dark px-5">
+                          Login
+                        </button>
+                      </div>
+                      <a className="small text-muted" href="#!">
+                        Forgot password?
+                      </a>
+                      <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
+                        Don't have an account?{" "}
+                        <a href="#!" style={{ color: "#393f81" }}>
+                          Register here
+                        </a>
+                      </p>
+                    </form>
                   </div>
-                  <div className="w-50 text-md-right">
-                    <a href="#" style={{ color: "#fff" }}>
-                      Forgot Password
-                    </a>
-                  </div>
                 </div>
-              </form>
-              <p className="w-100 text-center">
-                &mdash; Or Sign In With &mdash;
-              </p>
-              <div className="social d-flex text-center">
-                <a href="#" className="px-2 py-2 mr-md-1 rounded">
-                  <span className="ion-logo-facebook mr-2"></span> Facebook
-                </a>
-                <a href="#" className="px-2 py-2 ml-md-1 rounded">
-                  <span className="ion-logo-twitter mr-2"></span> Twitter
-                </a>
               </div>
             </div>
           </div>

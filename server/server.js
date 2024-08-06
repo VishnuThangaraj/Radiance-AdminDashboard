@@ -186,6 +186,7 @@ app.post("/register-member", async (req, res) => {
     gender,
     subscription,
     trainer_id,
+    subscriptionStartDate,
   } = req.body;
 
   let password = `${name}+1234`;
@@ -207,18 +208,29 @@ app.post("/register-member", async (req, res) => {
       weight,
       age,
       gender,
-      subscription,
       trainer_id,
       password: hashedPassword,
     });
 
-    await newMember.save();
+    const savedMember = await newMember.save();
+
+    const startDate = moment(subscriptionStartDate);
+    const endDate = startDate.add(1, "month").format("YYYY-MM-DD");
+
+    const newSubscription = new Subscription({
+      member_id: savedMember._id,
+      start_date: subscriptionStartDate,
+      end_date: endDate,
+      name: subscription,
+    });
+
+    await newSubscription.save();
 
     // Sending Mail (Replay)
     const mailOptions = {
       from: `vishnuthangaraj.vedhanthi@gmail.com`,
       to: email,
-      subject: `Your Trainer ID and Password Have Been Created | Radiance Yoga`,
+      subject: `Your Member ID and Password Have Been Created | Radiance Yoga`,
       text: `Hello ${name},
 We are pleased to inform you that your Member ID and password have been successfully created. Below are your login details:
 
@@ -265,10 +277,113 @@ app.get("/get-trainers", async (req, res) => {
 // Fetch Members
 app.get("/get-members", async (req, res) => {
   try {
-    const members = await Member.find();
+    const members = await Member.aggregate([
+      { $match: { role: "member" } },
+      {
+        $lookup: {
+          from: "subscriptions",
+          localField: "_id",
+          foreignField: "member_id",
+          as: "subscriptions",
+        },
+      },
+      {
+        $unwind: {
+          path: "$subscriptions",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          username: 1,
+          name: 1,
+          phone: 1,
+          height: 1,
+          weight: 1,
+          gender: 1,
+          subscription: "$subscriptions.name",
+          start_date: "$subscriptions.start_date",
+          end_date: "$subscriptions.end_date",
+        },
+      },
+    ]);
     res.status(200).json(members);
   } catch (err) {
     res.status(500).json({ message: "Error retrieving Members", error: err });
+  }
+});
+
+// Fetch Trainer by ID
+app.get("/trainer-data/:id", async (req, res) => {
+  const trainerId = req.params.id;
+
+  try {
+    const trainer = await Trainer.findById(trainerId);
+
+    if (!trainer) {
+      return res.status(404).json({ message: "Trainer not found" });
+    }
+
+    res.json(trainer);
+  } catch (error) {
+    console.error("Error fetching Trainer details:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Fetch Member by ID
+app.get("/member-data/:id", async (req, res) => {
+  const memberId = req.params.id;
+
+  try {
+    const member = await Member.findById(memberId);
+
+    if (!member) {
+      return res.status(404).json({ message: "Member not found" });
+    }
+
+    res.json(member);
+  } catch (error) {
+    console.error("Error fetching member details:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Update Trainer by ID
+app.put("/trainer-data/:id", async (req, res) => {
+  try {
+    const updatedTrainer = await Trainer.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (updatedTrainer) {
+      res.json(updatedTrainer);
+    } else {
+      res.status(404).json({ message: "Trainer not found" });
+    }
+  } catch (error) {
+    console.error("Error updating trainer:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Update member by ID
+app.put("/member-data/:id", async (req, res) => {
+  try {
+    const updatedMember = await Member.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (updatedMember) {
+      res.json(updatedMember);
+    } else {
+      res.status(404).json({ message: "Member not found" });
+    }
+  } catch (error) {
+    console.error("Error updating member:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -293,6 +408,7 @@ app.delete("/del-member/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await Member.findByIdAndDelete(id);
+    await Subscription.findByIdAndDelete(id);
 
     if (result) {
       res.status(200).json({ message: "Member deleted successfully" });

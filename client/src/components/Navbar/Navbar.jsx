@@ -16,7 +16,7 @@ const Navbar = ({ userDtls }) => {
         >
           <input
             type="text"
-            className="search-bar ms-3"
+            className="search-bar ms-3 py-2"
             placeholder="Search..."
           />
           <Icon path={mdiMagnify} size={1} className="search-icon" />

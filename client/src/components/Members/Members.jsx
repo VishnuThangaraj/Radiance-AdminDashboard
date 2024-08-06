@@ -22,9 +22,12 @@ const Members = () => {
   const [editMemberId, setEditMemberId] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:6969/membersdata")
+    fetch("http://localhost:6969/get-members")
       .then((response) => response.json())
-      .then((data) => setMembers(data))
+      .then((data) => {
+        console.log(data);
+        setMembers(data);
+      })
       .catch((error) => console.error("Error fetching members data:", error));
   }, []);
 
@@ -32,12 +35,9 @@ const Members = () => {
     setDeletingRow(id);
     setTimeout(async () => {
       try {
-        const response = await fetch(
-          `http://localhost:6969/membersdata/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
+        const response = await fetch(`http://localhost:6969/del-member/${id}`, {
+          method: "DELETE",
+        });
 
         if (response.ok) {
           setMembers((prevMembers) =>
@@ -54,11 +54,11 @@ const Members = () => {
   };
 
   const handleEdit = (id) => {
-    setEditMemberId(id); // Set the ID of the member to be edited
+    setEditMemberId(id);
   };
 
   const handleSaveEdit = () => {
-    setEditMemberId(null); // Close the edit form after saving
+    setEditMemberId(null);
   };
 
   return (
@@ -117,8 +117,8 @@ const Members = () => {
                     <td>{member.username}</td>
                     <td>{member.name}</td>
                     <td>{member.phone}</td>
-                    <td>{member.height}</td>
-                    <td>{member.weight}</td>
+                    <td>{member.height} cm</td>
+                    <td>{member.weight} Kg</td>
                     <td>{member.gender}</td>
                     <td>{member.subscription}</td>
                     <td>

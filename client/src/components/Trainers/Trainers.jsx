@@ -9,23 +9,23 @@ import {
   mdiArrowLeft,
 } from "@mdi/js";
 import AddTrainerForm from "../Forms/AddTrainerForm";
-import MemberProfile from "../ViewMember/ViewMember";
-import EditMemberForm from "../Forms/EditMemberForm";
+import TrainerProfile from "../ViewTrainer/ViewTrainer";
+import EditTrainerForm from "../Forms/EditTrainerForm";
 import "./Trainers.css";
 
 const Trainers = () => {
-  const [members, setMembers] = useState([]);
+  const [trainers, setTrainers] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [activeRow, setActiveRow] = useState(null);
   const [deletingRow, setDeletingRow] = useState(null);
   const [viewProfileId, setViewProfileId] = useState(null);
-  const [editMemberId, setEditMemberId] = useState(null);
+  const [editTrainerId, setEditTrainerId] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:6969/get-trainers")
       .then((response) => response.json())
-      .then((data) => setMembers(data))
-      .catch((error) => console.error("Error fetching members data:", error));
+      .then((data) => setTrainers(data))
+      .catch((error) => console.error("Error fetching trainers data:", error));
   }, []);
 
   const handleDelete = async (id) => {
@@ -40,29 +40,29 @@ const Trainers = () => {
         );
 
         if (response.ok) {
-          setMembers((prevMembers) =>
-            prevMembers.filter((member) => member._id !== id)
+          setTrainers((prevTrainers) =>
+            prevTrainers.filter((trainer) => trainer._id !== id)
           );
         } else {
-          console.error("Failed to delete member");
+          console.error("Failed to delete trainer");
         }
       } catch (error) {
-        console.error("Error deleting member:", error);
+        console.error("Error deleting trainer:", error);
       }
       setDeletingRow(null);
     }, 500);
   };
 
   const handleEdit = (id) => {
-    setEditMemberId(id);
+    setEditTrainerId(id);
   };
 
   const handleSaveEdit = () => {
-    setEditMemberId(null);
+    setEditTrainerId(null);
   };
 
   return (
-    <div id="members" className="display-area">
+    <div id="trainers" className="display-area">
       <div className="content-title" data-aos="fade-right">
         DASHBOARD
       </div>
@@ -106,8 +106,8 @@ const Trainers = () => {
               </tr>
             </thead>
             <tbody>
-              {members.length > 0 ? (
-                members.map((trainer) => (
+              {trainers.length > 0 ? (
+                trainers.map((trainer) => (
                   <tr
                     key={trainer._id}
                     className={`trainer-row ${
@@ -117,8 +117,8 @@ const Trainers = () => {
                     <td>{trainer.username}</td>
                     <td>{trainer.name}</td>
                     <td>{trainer.phone}</td>
-                    <td>{trainer.height}</td>
-                    <td>{trainer.weight}</td>
+                    <td>{trainer.height} cm</td>
+                    <td>{trainer.weight} Kg</td>
                     <td>{trainer.gender}</td>
                     <td
                       className={`${
@@ -186,15 +186,15 @@ const Trainers = () => {
       </div>
       {showForm && <AddTrainerForm onClose={() => setShowForm(false)} />}
       {viewProfileId && (
-        <MemberProfile
-          memberId={viewProfileId}
+        <TrainerProfile
+          trainerId={viewProfileId}
           onClose={() => setViewProfileId(null)}
         />
       )}
-      {editMemberId && (
-        <EditMemberForm
-          memberId={editMemberId}
-          onClose={() => setEditMemberId(null)}
+      {editTrainerId && (
+        <EditTrainerForm
+          trainerId={editTrainerId}
+          onClose={() => setEditTrainerId(null)}
           onSave={handleSaveEdit}
         />
       )}

@@ -10,12 +10,28 @@ const AddMemberForm = ({ onClose }) => {
   const [weight, setWeight] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
-  const [status, setStatus] = useState("Active");
+  const [trainers, setTrainers] = useState([]);
+  const [selectedTrainer, setSelectedTrainer] = useState("");
+  const [subscription, setSubscription] = useState("");
+  const [subscriptionStartDate, setSubscriptionStartDate] = useState(""); // Subscription Start Date
 
   const formRef = useRef(null);
   const notificationRef = useRef(null);
 
   useEffect(() => {
+    // Fetch trainers data
+    const fetchTrainers = async () => {
+      try {
+        const response = await fetch("http://localhost:6969/get-trainers");
+        const data = await response.json();
+        setTrainers(data);
+      } catch (error) {
+        console.error("Error fetching trainers:", error);
+      }
+    };
+
+    fetchTrainers();
+
     const handleClickOutside = (event) => {
       if (formRef.current && !formRef.current.contains(event.target)) {
         onClose();
@@ -32,7 +48,7 @@ const AddMemberForm = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:6969/register`, {
+      const response = await fetch(`http://localhost:6969/register-member`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -44,7 +60,9 @@ const AddMemberForm = ({ onClose }) => {
           weight,
           age,
           gender,
-          status,
+          trainer_id: selectedTrainer,
+          subscription,
+          subscriptionStartDate,
         }),
       });
 
@@ -109,7 +127,7 @@ const AddMemberForm = ({ onClose }) => {
           <form onSubmit={handleSubmit}>
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="name">Name:</label>
+                <label htmlFor="name">Name</label>
                 <input
                   type="text"
                   id="name"
@@ -120,7 +138,7 @@ const AddMemberForm = ({ onClose }) => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="email">Email:</label>
+                <label htmlFor="email">Email</label>
                 <input
                   type="email"
                   id="email"
@@ -133,7 +151,7 @@ const AddMemberForm = ({ onClose }) => {
             </div>
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="phone">Phone:</label>
+                <label htmlFor="phone">Phone</label>
                 <input
                   type="text"
                   id="phone"
@@ -144,7 +162,7 @@ const AddMemberForm = ({ onClose }) => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="address">Address:</label>
+                <label htmlFor="address">Address</label>
                 <input
                   type="text"
                   id="address"
@@ -157,7 +175,7 @@ const AddMemberForm = ({ onClose }) => {
             </div>
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="height">Height (cm):</label>
+                <label htmlFor="height">Height (cm)</label>
                 <input
                   type="text"
                   id="height"
@@ -168,7 +186,7 @@ const AddMemberForm = ({ onClose }) => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="weight">Weight (kg):</label>
+                <label htmlFor="weight">Weight (kg)</label>
                 <input
                   type="text"
                   id="weight"
@@ -178,10 +196,8 @@ const AddMemberForm = ({ onClose }) => {
                   required
                 />
               </div>
-            </div>
-            <div className="form-row">
               <div className="form-group">
-                <label htmlFor="age">Age:</label>
+                <label htmlFor="age">Age</label>
                 <input
                   type="text"
                   id="age"
@@ -191,8 +207,10 @@ const AddMemberForm = ({ onClose }) => {
                   required
                 />
               </div>
+            </div>
+            <div className="form-row">
               <div className="form-group">
-                <label htmlFor="gender">Gender:</label>
+                <label htmlFor="gender">Gender</label>
                 <select
                   id="gender"
                   className={gender ? "valid" : ""}
@@ -206,6 +224,56 @@ const AddMemberForm = ({ onClose }) => {
                   <option value="Female">Female</option>
                   <option value="Other">Other</option>
                 </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="trainer">Trainer</label>
+                <select
+                  id="trainer"
+                  className={selectedTrainer ? "valid" : ""}
+                  value={selectedTrainer}
+                  onChange={(e) => setSelectedTrainer(e.target.value)}
+                  style={{ padding: "13px" }}
+                  required
+                >
+                  <option value="">Select Trainer</option>
+                  {trainers.map((trainer) => (
+                    <option key={trainer.id} value={trainer._id}>
+                      {trainer.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="subscription">Membership</label>
+                <select
+                  id="subscription"
+                  className={subscription ? "valid" : ""}
+                  value={subscription}
+                  onChange={(e) => setSubscription(e.target.value)}
+                  style={{ padding: "13px" }}
+                  required
+                >
+                  <option value="">Select Membership</option>
+                  <option value="BASIC">Basic</option>
+                  <option value="PREMIUM">Premium</option>
+                  <option value="ELITE">Elite</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="subscriptionStartDate">
+                  Subscription Start Date
+                </label>
+                <input
+                  type="date"
+                  id="subscriptionStartDate"
+                  className={subscriptionStartDate ? "valid" : ""}
+                  value={subscriptionStartDate}
+                  onChange={(e) => setSubscriptionStartDate(e.target.value)}
+                  style={{ padding: "12px" }}
+                  required
+                />
               </div>
             </div>
             <div className="btn-holder text-center pt-3">

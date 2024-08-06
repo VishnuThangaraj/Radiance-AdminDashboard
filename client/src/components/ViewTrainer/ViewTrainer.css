@@ -1,0 +1,83 @@
+/* Overlay for the view trainer component */
+.view-trainer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.616);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Main container for the view trainer modal */
+.view-trainer {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 90%;
+  max-width: 600px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+
+.close-btn:hover {
+  transform: scaleX(1.05);
+}
+
+/* Container for profile details and image */
+.view-trainer-content {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Profile details */
+.profile-details {
+  flex: 1;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.profile-details p {
+  margin: 10px 0;
+  font-size: 1rem;
+  color: #555;
+}
+
+.profile-details strong {
+  color: #333;
+}
+
+/* Profile image container */
+.profile-image {
+  flex: 0 0 250px; /* Fixed width for the image */
+}
+
+.profile-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
