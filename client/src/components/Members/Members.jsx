@@ -25,7 +25,6 @@ const Members = () => {
     fetch("http://localhost:6969/get-members")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setMembers(data);
       })
       .catch((error) => console.error("Error fetching members data:", error));

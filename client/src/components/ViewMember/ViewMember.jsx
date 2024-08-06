@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./ViewMember.css"; // Add necessary styling
+import "./ViewMember.css";
 
 const ViewMember = ({ memberId, onClose }) => {
   const [member, setMember] = useState(null);
@@ -9,7 +9,7 @@ const ViewMember = ({ memberId, onClose }) => {
     const fetchMemberDetails = async () => {
       try {
         const response = await fetch(
-          `http://localhost:6969/membersdata/${memberId}`
+          `http://localhost:6969/member-data/${memberId}`
         );
         if (response.ok) {
           const data = await response.json();
@@ -63,7 +63,15 @@ const ViewMember = ({ memberId, onClose }) => {
               <strong>Phone :</strong> &nbsp;{member.phone}
             </p>
             <p>
-              <strong>Position :</strong> &nbsp;{member.position}
+              <strong>Gender :</strong> &nbsp;{member.gender} &nbsp;&nbsp;
+              <strong>Age :</strong> &nbsp;{member.age}
+            </p>
+            <p>
+              <strong>Height :</strong> &nbsp;{member.height} &nbsp;&nbsp;
+              <strong>Weight :</strong> &nbsp;{member.weight}
+            </p>
+            <p>
+              <strong>Trainer :</strong> &nbsp;{member.trainer_id}
             </p>
             <p>
               <strong>Address :</strong> &nbsp;{member.address}

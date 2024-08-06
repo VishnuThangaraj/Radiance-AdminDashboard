@@ -301,6 +301,9 @@ app.get("/get-members", async (req, res) => {
           height: 1,
           weight: 1,
           gender: 1,
+          email: 1,
+          address: 1,
+          age: 1,
           subscription: "$subscriptions.name",
           start_date: "$subscriptions.start_date",
           end_date: "$subscriptions.end_date",
@@ -336,13 +339,48 @@ app.get("/member-data/:id", async (req, res) => {
   const memberId = req.params.id;
 
   try {
-    const member = await Member.findById(memberId);
+    const memberObjectId = new mongoose.Types.ObjectId(memberId);
 
-    if (!member) {
+    const member = await Member.aggregate([
+      { $match: { _id: memberObjectId } },
+      {
+        $lookup: {
+          from: "subscriptions",
+          localField: "_id",
+          foreignField: "member_id",
+          as: "subscriptions",
+        },
+      },
+      {
+        $unwind: {
+          path: "$subscriptions",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          username: 1,
+          name: 1,
+          phone: 1,
+          height: 1,
+          weight: 1,
+          gender: 1,
+          email: 1,
+          address: 1,
+          age: 1,
+          trainer_id: 1,
+          subscription: "$subscriptions.name",
+          start_date: "$subscriptions.start_date",
+          end_date: "$subscriptions.end_date",
+        },
+      },
+    ]);
+
+    if (!member || member.length === 0) {
       return res.status(404).json({ message: "Member not found" });
     }
 
-    res.json(member);
+    res.json(member[0]);
   } catch (error) {
     console.error("Error fetching member details:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -370,20 +408,55 @@ app.put("/trainer-data/:id", async (req, res) => {
 
 // Update member by ID
 app.put("/member-data/:id", async (req, res) => {
+  const memberId = req.params.id;
+  const {
+    name,
+    email,
+    phone,
+    address,
+    height,
+    weight,
+    age,
+    gender,
+    trainer_id,
+    subscription,
+    start_date,
+  } = req.body;
+
   try {
-    const updatedMember = await Member.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
+    // Update the member details
+    const member = await Member.findByIdAndUpdate(
+      memberId,
+      {
+        name,
+        email,
+        phone,
+        address,
+        height,
+        weight,
+        age,
+        gender,
+        trainer_id,
+      },
+      { new: true }
     );
-    if (updatedMember) {
-      res.json(updatedMember);
-    } else {
-      res.status(404).json({ message: "Member not found" });
+
+    // Update or create the subscription details
+    let subscriptionDoc = await Subscription.findOne({ member_id: memberId });
+    if (subscriptionDoc) {
+      subscriptionDoc.name = subscription;
+      subscriptionDoc.start_date = start_date;
     }
+
+    await subscriptionDoc.save();
+    await member.save();
+
+    res
+      .status(200)
+      .json({ message: "Member and subscription updated successfully" });
   } catch (error) {
-    console.error("Error updating member:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error updating member details:", error);
+    res.status(500).json({ message: "Failed to update member details" });
   }
 });
 
@@ -408,7 +481,7 @@ app.delete("/del-member/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await Member.findByIdAndDelete(id);
-    await Subscription.findByIdAndDelete(id);
+    await Subscription.deleteMany({ member_id: id });
 
     if (result) {
       res.status(200).json({ message: "Member deleted successfully" });

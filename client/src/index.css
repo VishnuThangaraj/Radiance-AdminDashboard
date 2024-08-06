@@ -109,3 +109,13 @@ select:focus {
   box-shadow: 0 0 8px rgba(108, 115, 122, 0.5);
   outline: none;
 }
+
+.make-basic {
+  color: silver;
+}
+.make-premium {
+  color: gold;
+}
+.make-elite {
+  color: purple;
+}
