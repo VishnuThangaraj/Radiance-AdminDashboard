@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./ViewMember.css";
+import "./ViewMembership.css";
 
-const ViewMember = ({ memberId, onClose }) => {
+const ViewMembership = ({ memberId, onClose }) => {
   const [member, setMember] = useState(null);
   const modalRef = useRef(null);
 
@@ -102,8 +102,7 @@ const ViewMember = ({ memberId, onClose }) => {
               <strong>Weight :</strong> &nbsp;{member.weight}
             </p> */}
             <p>
-              <strong>Membership :</strong> &nbsp;{member.subscription}
-              &nbsp;
+              <strong>Subscription :</strong> &nbsp;{member.subscription} &nbsp;
               <span className={`${member.payment ? "make-green" : "make-red"}`}>
                 {member.payment ? "(Paid)" : "(Pending)"}
               </span>
@@ -124,7 +123,7 @@ const ViewMember = ({ memberId, onClose }) => {
             </p>
           </div>
           <div
-            className="profile-image mt-5"
+            className="profile-image mt-4"
             data-aos="fade-left"
             data-aos-delay="100"
           >
@@ -139,4 +138,4 @@ const ViewMember = ({ memberId, onClose }) => {
   );
 };
 
-export default ViewMember;
+export default ViewMembership;

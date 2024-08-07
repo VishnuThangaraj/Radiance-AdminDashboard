@@ -11,9 +11,8 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Login from "./components/Login/Login";
 import Members from "./components/Members/Members";
 import Loading from "./components/Loader/Loading";
-import MemberCalendar from "./components/MemberCalendar/MemberCalendar";
 import Trainers from "./components/Trainers/Trainers";
-import AdminCalendar from "./components/AdminCalendar/AdminCalendar";
+import Membership from "./components/Membership/Membership";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -42,6 +41,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Navigate to={user ? "/home" : "/login"} />} />
         <Route
           path="/login"
           element={
@@ -64,14 +64,12 @@ const App = () => {
               user.role === "admin" ? (
                 <>
                   <Navbar userDtls={user} />
-                  <Members />
                   <Sidebar userRole={user.role} />
                 </>
               ) : (
                 <>
                   <Navbar userDtls={user} />
                   <Sidebar userRole={user.role} />
-                  <MemberCalendar User_Data={user} />
                 </>
               )
             ) : (
@@ -79,7 +77,28 @@ const App = () => {
             )
           }
         />
-        <Route path="/" element={<Navigate to={user ? "/home" : "/login"} />} />
+        <Route
+          path="/member"
+          element={
+            user ? (
+              user.role === "admin" ? (
+                <>
+                  <Navbar userDtls={user} />
+                  <Members />
+                  <Sidebar userRole={user.role} />
+                </>
+              ) : (
+                <>
+                  <Navbar userDtls={user} />
+                  <Sidebar userRole={user.role} />
+                  {/* <MemberCalendar User_Data={user} /> */}
+                </>
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
         <Route
           path="/trainer"
           element={
@@ -99,13 +118,48 @@ const App = () => {
           }
         />
         <Route
+          path="/payment"
+          element={
+            user ? (
+              user.role === "admin" ? (
+                <>
+                  <Navbar userDtls={user} />
+                  <Sidebar userRole={user.role} />
+                </>
+              ) : (
+                <Navigate to="/home" />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/membership"
+          element={
+            user ? (
+              user.role === "admin" ? (
+                <>
+                  <Navbar userDtls={user} />
+                  <Sidebar userRole={user.role} />
+                  <Membership />
+                </>
+              ) : (
+                <Navigate to="/home" />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
           path="/calendar"
           element={
             user ? (
               user.role === "admin" ? (
                 <>
                   <Navbar userDtls={user} />
-                  <AdminCalendar user={user} />
+                  {/* <AdminCalendar user={user} /> */}
                   <Sidebar userRole={user.role} />
                 </>
               ) : (

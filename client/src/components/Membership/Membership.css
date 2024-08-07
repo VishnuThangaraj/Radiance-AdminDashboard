@@ -1,0 +1,39 @@
+.add-membership {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+.form-holder input {
+  margin-inline: 20px;
+
+  width: 25%;
+  border-radius: 5%/30%;
+  padding: 10px 5px;
+  border: 1px solid #e0e0e0;
+}
+.membership-table-holder {
+  margin-top: 20px;
+  padding: 20px;
+  min-height: 350px;
+  max-height: 350px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  border-radius: 2%/4%;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+.table-wrappers {
+  max-height: 310px;
+  overflow-y: auto;
+}
+.table-wrappers::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+.table-wrappers {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

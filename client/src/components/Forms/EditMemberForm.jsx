@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import "./EditMemberForm.css";
 
 const EditMemberForm = ({ memberId, onClose, onSave }) => {
@@ -12,12 +13,13 @@ const EditMemberForm = ({ memberId, onClose, onSave }) => {
     age: "",
     gender: "",
     trainer_id: "",
-    subscription: "",
-    start_date: "",
+    subscriptionId: "",
   });
   const [trainers, setTrainers] = useState([]);
-
+  const [plans, setPlans] = useState([]);
+  const [subscriptionDetails, setSubscriptionDetails] = useState({});
   const formRef = useRef(null);
+  const notificationRef = useRef(null);
 
   useEffect(() => {
     const fetchMemberDetails = async () => {
@@ -38,8 +40,6 @@ const EditMemberForm = ({ memberId, onClose, onSave }) => {
       }
     };
 
-    fetchMemberDetails();
-
     const fetchTrainers = async () => {
       try {
         const response = await fetch("http://localhost:6969/get-trainers");
@@ -50,7 +50,20 @@ const EditMemberForm = ({ memberId, onClose, onSave }) => {
       }
     };
 
+    const fetchPlans = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:6969/get-membership"
+        );
+        setPlans(response.data);
+      } catch (error) {
+        console.error("Error fetching plans:", error);
+      }
+    };
+
+    fetchMemberDetails();
     fetchTrainers();
+    fetchPlans();
 
     const handleClickOutside = (event) => {
       if (formRef.current && !formRef.current.contains(event.target)) {
@@ -64,6 +77,13 @@ const EditMemberForm = ({ memberId, onClose, onSave }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [memberId, onClose]);
+
+  useEffect(() => {
+    const selectedPlan = plans.find(
+      (plan) => plan._id === member.subscriptionId
+    );
+    setSubscriptionDetails(selectedPlan || {});
+  }, [member.subscriptionId, plans]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,15 +104,40 @@ const EditMemberForm = ({ memberId, onClose, onSave }) => {
       );
 
       if (response.ok) {
+        showNotification("Member updated successfully!", "success");
         onSave();
         onClose();
-        window.location.reload();
       } else {
-        console.error("Failed to update member details");
+        showNotification("Failed to update member details", "error");
       }
     } catch (error) {
+      showNotification(
+        "Error updating member details. Please try again.",
+        "error"
+      );
       console.error("Error updating member details:", error);
     }
+  };
+
+  const showNotification = (message, type) => {
+    const notification = notificationRef.current;
+    const icons = {
+      success: `<i class="fa-solid fa-check-circle"></i>`,
+      error: `<i class="fa-solid fa-exclamation-circle"></i>`,
+    };
+    const icon = icons[type] || icons.success;
+
+    notification.innerHTML = `<div class="notification-content">
+      <span class="notification-icon">${icon}</span>
+      <span>${message}</span>
+    </div>`;
+    notification.className = `notification ${type}`;
+    notification.style.opacity = "1";
+    notification.style.transform = "translateY(0)";
+    setTimeout(() => {
+      notification.style.opacity = "0";
+      notification.style.transform = "translateY(-100%)";
+    }, 3000);
   };
 
   return (
@@ -230,7 +275,7 @@ const EditMemberForm = ({ memberId, onClose, onSave }) => {
               >
                 <option value="">Select Trainer</option>
                 {trainers.map((trainer) => (
-                  <option key={trainer.id} value={trainer._id}>
+                  <option key={trainer._id} value={trainer._id}>
                     {trainer.name}
                   </option>
                 ))}
@@ -242,31 +287,30 @@ const EditMemberForm = ({ memberId, onClose, onSave }) => {
               <label htmlFor="subscription">Membership</label>
               <select
                 id="subscription"
-                name="subscription"
-                className={member.subscription ? "valid" : ""}
-                value={member.subscription}
+                name="subscriptionId"
+                className={member.subscriptionId ? "valid" : ""}
+                value={member.subscriptionId}
                 onChange={handleChange}
                 style={{ padding: "13px" }}
                 required
               >
                 <option value="">Select Membership</option>
-                <option value="BASIC">Basic</option>
-                <option value="PREMIUM">Premium</option>
-                <option value="ELITE">Elite</option>
+                {plans.map((plan) => (
+                  <option key={plan._id} value={plan._id}>
+                    {plan.name}
+                  </option>
+                ))}
               </select>
             </div>
-            <div className="form-group">
-              <label htmlFor="start_date">Subscription Start Date</label>
-              <input
-                type="date"
-                id="start_date"
-                name="start_date"
-                className={member.start_date ? "valid" : ""}
-                value={member.start_date.slice(0, 10)}
-                onChange={handleChange}
-                style={{ padding: "12px" }}
-                required
-              />
+            <div className="form-group pt-4 ms-3">
+              <div className="plan-price">
+                <strong>Price : </strong> &#8377;{" "}
+                {subscriptionDetails.price || 0}
+              </div>
+              <div className="plan-duration">
+                <strong>Duration : </strong> {subscriptionDetails.duration || 0}{" "}
+                {subscriptionDetails.duration === 1 ? "Month" : "Months"}
+              </div>
             </div>
           </div>
           <div className="btn-holder text-center pt-3">
@@ -275,6 +319,7 @@ const EditMemberForm = ({ memberId, onClose, onSave }) => {
             </button>
           </div>
         </form>
+        <div ref={notificationRef} className="notification"></div>
       </div>
     </div>
   );

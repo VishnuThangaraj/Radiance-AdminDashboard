@@ -9,6 +9,7 @@ const Member = require("./models/Member");
 const Subscription = require("./models/Subscription");
 const Trainer = require("./models/Trainer");
 const Transaction = require("./models/Transcation");
+const Membership = require("./models/Membership");
 const bcrypt = require("bcryptjs");
 const moment = require("moment");
 
@@ -184,12 +185,11 @@ app.post("/register-member", async (req, res) => {
     weight,
     age,
     gender,
-    subscription,
+    subscriptionDetails,
     trainer_id,
-    subscriptionStartDate,
   } = req.body;
 
-  let password = `${name}+1234`;
+  let password = `admin123VT`;
 
   try {
     const lastMember = await Member.findOne().sort({ _id: -1 });
@@ -214,14 +214,19 @@ app.post("/register-member", async (req, res) => {
 
     const savedMember = await newMember.save();
 
+    const subscriptionStartDate = moment().format("YYYY-MM-DD");
+
     const startDate = moment(subscriptionStartDate);
-    const endDate = startDate.add(1, "month").format("YYYY-MM-DD");
+    const endDate = startDate
+      .add(subscriptionDetails.duration, "month")
+      .format("YYYY-MM-DD");
 
     const newSubscription = new Subscription({
       member_id: savedMember._id,
       start_date: subscriptionStartDate,
       end_date: endDate,
-      name: subscription,
+      name: subscriptionDetails.name,
+      membership_id: subscriptionDetails._id,
     });
 
     await newSubscription.save();
@@ -251,9 +256,9 @@ vishnuthangaraj@radiance.com
 +91 6383 580 966`,
     };
 
-    transporter.sendMail(mailOptions);
+    // transporter.sendMail(mailOptions);
 
-    res.status(201).json({ message: "User registered", user: newMember });
+    res.status(200).json({ message: "User registered", user: newMember });
   } catch (err) {
     console.error("Error in /register:", err);
     if (err.code === 11000) {
@@ -261,6 +266,23 @@ vishnuthangaraj@radiance.com
     } else {
       res.status(500).json({ error: "Server error", details: err.message });
     }
+  }
+});
+
+// Register Membership Plan
+app.post("/register-membership", async (req, res) => {
+  const { name, duration, price } = req.body;
+
+  try {
+    const newMembership = new Membership({ name, duration, price });
+    await newMembership.save();
+    res.status(200).json({
+      message: "Membership registered successfully",
+      membership: newMembership,
+    });
+  } catch (error) {
+    console.log("Error Adding Membership Plan", error);
+    res.status(500).json({ message: "Error Adding Membership Plan", error });
   }
 });
 
@@ -307,12 +329,25 @@ app.get("/get-members", async (req, res) => {
           subscription: "$subscriptions.name",
           start_date: "$subscriptions.start_date",
           end_date: "$subscriptions.end_date",
+          subscriptionId: "$subscriptions.membership_id",
         },
       },
     ]);
     res.status(200).json(members);
   } catch (err) {
     res.status(500).json({ message: "Error retrieving Members", error: err });
+  }
+});
+
+// Fetch Membership
+app.get("/get-membership", async (req, res) => {
+  try {
+    const memberships = await Membership.find();
+    res.status(200).json(memberships);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving Membership", errror: err });
   }
 });
 
@@ -358,6 +393,20 @@ app.get("/member-data/:id", async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: "trainers",
+          localField: "trainer_id",
+          foreignField: "_id",
+          as: "trainer",
+        },
+      },
+      {
+        $unwind: {
+          path: "$trainer",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
         $project: {
           username: 1,
           name: 1,
@@ -369,9 +418,12 @@ app.get("/member-data/:id", async (req, res) => {
           address: 1,
           age: 1,
           trainer_id: 1,
+          trainer_name: "$trainer.name",
           subscription: "$subscriptions.name",
           start_date: "$subscriptions.start_date",
           end_date: "$subscriptions.end_date",
+          payment: "$subscriptions.payment_status",
+          subscriptionId: "$subscriptions.membership_id",
         },
       },
     ]);
@@ -409,19 +461,10 @@ app.put("/trainer-data/:id", async (req, res) => {
 // Update member by ID
 app.put("/member-data/:id", async (req, res) => {
   const memberId = req.params.id;
-  const {
-    name,
-    email,
-    phone,
-    address,
-    height,
-    weight,
-    age,
-    gender,
-    trainer_id,
-    subscription,
-    start_date,
-  } = req.body;
+  const { member } = req.body;
+
+  console.log(member);
+  return;
 
   try {
     // Update the member details
@@ -443,9 +486,14 @@ app.put("/member-data/:id", async (req, res) => {
 
     // Update or create the subscription details
     let subscriptionDoc = await Subscription.findOne({ member_id: memberId });
+
+    const startDate = moment(start_date);
+    const endDate = startDate.add(1, "month").format("YYYY-MM-DD");
+
     if (subscriptionDoc) {
       subscriptionDoc.name = subscription;
       subscriptionDoc.start_date = start_date;
+      subscriptionDoc.end_date = endDate;
     }
 
     await subscriptionDoc.save();
@@ -480,8 +528,10 @@ app.delete("/del-trainer/:id", async (req, res) => {
 app.delete("/del-member/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    const memberObjectId = new mongoose.Types.ObjectId(id);
+
     const result = await Member.findByIdAndDelete(id);
-    await Subscription.deleteMany({ member_id: id });
+    await Subscription.deleteMany({ member_id: memberObjectId });
 
     if (result) {
       res.status(200).json({ message: "Member deleted successfully" });

@@ -4,7 +4,7 @@
   top: 0;
   height: 100%;
   width: 220px;
-  background-color: #191c25fb;
+  background-color: #191c25ef;
   /* background-color: #1a2036; */
   color: white;
   box-sizing: border-box;
@@ -25,7 +25,7 @@
 
 .sidbar_menu {
   height: 40px;
-  background-color: #151b2b;
+  background-color: #151b2bf1;
 }
 
 .role_area {
@@ -70,7 +70,7 @@
 }
 
 .menu-label {
-  color: #fff;
+  color: #96959b;
   font-size: 1rem;
 }
 
@@ -78,4 +78,15 @@
   position: fixed;
   bottom: 10px;
   left: 50px;
+}
+.nav-active {
+  background-color: #191c25ef;
+  border-inline-start: 4px solid blue;
+  border-top-right-radius: 150px;
+  border-bottom-right-radius: 150px;
+  margin-inline-end: 10px;
+
+  .menu-label {
+    color: white;
+  }
 }

@@ -111,11 +111,11 @@ select:focus {
 }
 
 .make-basic {
-  color: silver;
+  color: rgb(170, 167, 167);
 }
 .make-premium {
   color: gold;
 }
 .make-elite {
-  color: purple;
+  color: rgb(165, 5, 165);
 }

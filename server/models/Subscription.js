@@ -9,6 +9,11 @@ const SubscriptionSchema = new mongoose.Schema({
     ref: "Member",
     required: true,
   },
+  membership_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Membership",
+    required: true,
+  },
   payment_status: { type: Boolean, default: false },
 });
 

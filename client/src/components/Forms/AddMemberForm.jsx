@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import "./AddMemberForm.css";
 
 const AddMemberForm = ({ onClose }) => {
@@ -12,9 +13,9 @@ const AddMemberForm = ({ onClose }) => {
   const [gender, setGender] = useState("");
   const [trainers, setTrainers] = useState([]);
   const [selectedTrainer, setSelectedTrainer] = useState("");
-  const [subscription, setSubscription] = useState("");
-  const [subscriptionStartDate, setSubscriptionStartDate] = useState(""); // Subscription Start Date
-
+  const [subscriptionId, setSubscriptionId] = useState("");
+  const [subscriptionDetails, setSubscriptionDetails] = useState({});
+  const [plans, setPlans] = useState([]);
   const formRef = useRef(null);
   const notificationRef = useRef(null);
 
@@ -22,15 +23,27 @@ const AddMemberForm = ({ onClose }) => {
     // Fetch trainers data
     const fetchTrainers = async () => {
       try {
-        const response = await fetch("http://localhost:6969/get-trainers");
-        const data = await response.json();
-        setTrainers(data);
+        const response = await axios.get("http://localhost:6969/get-trainers");
+        setTrainers(response.data);
       } catch (error) {
         console.error("Error fetching trainers:", error);
       }
     };
 
     fetchTrainers();
+
+    const fetchPlans = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:6969/get-membership"
+        );
+        setPlans(response.data);
+      } catch (error) {
+        console.error("Error fetching plans:", error);
+      }
+    };
+
+    fetchPlans();
 
     const handleClickOutside = (event) => {
       if (formRef.current && !formRef.current.contains(event.target)) {
@@ -45,13 +58,17 @@ const AddMemberForm = ({ onClose }) => {
     };
   }, [onClose]);
 
+  useEffect(() => {
+    const selectedPlan = plans.find((plan) => plan._id === subscriptionId);
+    setSubscriptionDetails(selectedPlan || {});
+  }, [subscriptionId, plans]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:6969/register-member`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const response = await axios.post(
+        "http://localhost:6969/register-member",
+        {
           name,
           email,
           phone,
@@ -61,18 +78,19 @@ const AddMemberForm = ({ onClose }) => {
           age,
           gender,
           trainer_id: selectedTrainer,
-          subscription,
-          subscriptionStartDate,
-        }),
-      });
+          subscriptionDetails,
+        }
+      );
 
-      if (response.ok) {
+      if (response.status === 200) {
         showNotification("Member added successfully!", "success");
         window.location.reload();
         onClose();
       } else {
-        const result = await response.json();
-        showNotification(result.message || "Failed to add member", "error");
+        showNotification(
+          response.data.message || "Failed to add member",
+          "error"
+        );
       }
     } catch (error) {
       showNotification("Error adding member. Please try again.", "error");
@@ -157,7 +175,7 @@ const AddMemberForm = ({ onClose }) => {
                   id="phone"
                   className={phone ? "valid" : ""}
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={handleNumberChange(setPhone)}
                   required
                 />
               </div>
@@ -237,7 +255,7 @@ const AddMemberForm = ({ onClose }) => {
                 >
                   <option value="">Select Trainer</option>
                   {trainers.map((trainer) => (
-                    <option key={trainer.id} value={trainer._id}>
+                    <option key={trainer._id} value={trainer._id}>
                       {trainer.name}
                     </option>
                   ))}
@@ -249,31 +267,30 @@ const AddMemberForm = ({ onClose }) => {
                 <label htmlFor="subscription">Membership</label>
                 <select
                   id="subscription"
-                  className={subscription ? "valid" : ""}
-                  value={subscription}
-                  onChange={(e) => setSubscription(e.target.value)}
+                  className={subscriptionId ? "valid" : ""}
+                  value={subscriptionId}
+                  onChange={(e) => setSubscriptionId(e.target.value)}
                   style={{ padding: "13px" }}
                   required
                 >
                   <option value="">Select Membership</option>
-                  <option value="BASIC">Basic</option>
-                  <option value="PREMIUM">Premium</option>
-                  <option value="ELITE">Elite</option>
+                  {plans.map((plan) => (
+                    <option key={plan._id} value={plan._id}>
+                      {plan.name}
+                    </option>
+                  ))}
                 </select>
               </div>
-              <div className="form-group">
-                <label htmlFor="subscriptionStartDate">
-                  Subscription Start Date
-                </label>
-                <input
-                  type="date"
-                  id="subscriptionStartDate"
-                  className={subscriptionStartDate ? "valid" : ""}
-                  value={subscriptionStartDate}
-                  onChange={(e) => setSubscriptionStartDate(e.target.value)}
-                  style={{ padding: "12px" }}
-                  required
-                />
+              <div className="form-group pt-4 ms-3">
+                <div className="plan-price">
+                  <strong>Price : </strong> &#8377;{" "}
+                  {subscriptionDetails.price || 0}
+                </div>
+                <div className="plan-duration">
+                  <strong>Duration : </strong>{" "}
+                  {subscriptionDetails.duration || 0}{" "}
+                  {subscriptionDetails.duration === 1 ? "Month" : "Months"}
+                </div>
               </div>
             </div>
             <div className="btn-holder text-center pt-3">

@@ -57,7 +57,6 @@ const PlanForTheDay = ({ userID }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "time_required") {
-      // Ensure value is a number between 1 and 24
       if (value === "" || /^[1-9]|1[0-9]|2[0-4]$/.test(value)) {
         setNewTask({ ...newTask, [name]: value });
       }

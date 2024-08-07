@@ -6,46 +6,55 @@ import {
   mdiCalendarMonth,
   mdiAccountMultiple,
   mdiYoga,
-  mdiFileChart,
-  mdiChevronDown,
-  mdiChevronUp,
-  mdiCircleSmall,
   mdiLogout,
   mdiCreditCardOutline,
-  mdiCheckAll,
-  mdiCheck,
+  mdiCrown,
 } from "@mdi/js";
-import Collapse from "react-collapse";
 import "./Sidebar.css";
 
 const Sidebar = ({ userRole }) => {
   const navigate = useNavigate();
   const [isReportOpen, setIsReportOpen] = useState(false);
+  const currentPath = location.pathname.slice(1);
 
   const adminSidebar = [
     {
       key: `sidebar-1`,
-      label: "Members",
+      label: "Dashboard",
       value: "home",
-      icon: mdiAccountMultiple,
+      icon: mdiSpeedometer,
       color: "#8f60e5",
     },
     {
       key: `sidebar-2`,
-      label: "Trainers",
-      value: "trainer",
-      icon: mdiYoga,
+      label: "Members",
+      value: "member",
+      icon: mdiAccountMultiple,
       color: "#ffab06",
     },
     {
       key: `sidebar-3`,
+      label: "Trainers",
+      value: "trainer",
+      icon: mdiYoga,
+      color: "#ac2c36",
+    },
+    {
+      key: `sidebar-4`,
       label: "Payment",
       value: "payment",
       icon: mdiCreditCardOutline,
       color: "#18be5a",
     },
     {
-      key: `sidebar-3`,
+      key: `sidebar-5`,
+      label: "Membership",
+      value: "membership",
+      icon: mdiCrown,
+      color: "#ffab15",
+    },
+    {
+      key: `sidebar-6`,
       label: "Calendar",
       value: "calendar",
       icon: mdiCalendarMonth,
@@ -76,7 +85,6 @@ const Sidebar = ({ userRole }) => {
         method: "POST",
         credentials: "include",
       });
-      localStorage.removeItem("userToken");
       window.location.reload();
     } catch (error) {
       console.error("Logout failed:", error);
@@ -113,7 +121,9 @@ const Sidebar = ({ userRole }) => {
           ? adminSidebar.map((menu) => (
               <div
                 key={menu.key}
-                className="sidebar-content"
+                className={`sidebar-content ${
+                  currentPath === menu.value ? "nav-active" : ""
+                }`}
                 onClick={() => handleItemClick(menu.value)}
               >
                 <div className="icon-container">
@@ -134,58 +144,6 @@ const Sidebar = ({ userRole }) => {
                 <span className="menu-label">{menu.label}</span>
               </div>
             ))}
-        {userRole === "user" && (
-          <>
-            <div
-              className="sidebar-content"
-              onClick={() => setIsReportOpen(!isReportOpen)}
-            >
-              <div className="icon-container">
-                <Icon path={mdiFileChart} size={0.7} color="#f7454d" />
-              </div>
-              <span className="menu-label">Report</span>
-              <div className=" ms-4 icon-container chevron-container">
-                <Icon
-                  path={isReportOpen ? mdiChevronUp : mdiChevronDown}
-                  size={0.7}
-                  color="#8f60e5"
-                />
-              </div>
-            </div>
-            <Collapse isOpened={isReportOpen}>
-              <div className="report-subsection ms-1">
-                <div
-                  className="sidebar-content pb-2"
-                  onClick={() => handleItemClick("pfd")}
-                >
-                  <span
-                    className="menu-label"
-                    style={{
-                      fontSize: "14px",
-                    }}
-                  >
-                    <Icon path={mdiCheck} className="mx-2" size={0.8} />
-                    Plan For The Day
-                  </span>
-                </div>
-                <div
-                  className="sidebar-content pt-0"
-                  onClick={() => handleItemClick("eod")}
-                >
-                  <span
-                    className="menu-label"
-                    style={{
-                      fontSize: "14px",
-                    }}
-                  >
-                    <Icon path={mdiCheckAll} className="mx-2" size={0.8} />
-                    End Of The Day
-                  </span>
-                </div>
-              </div>
-            </Collapse>
-          </>
-        )}
       </div>
       <div className="logout-user text-center">
         <button

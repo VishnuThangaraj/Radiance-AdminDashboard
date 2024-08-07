@@ -119,7 +119,7 @@ const Members = () => {
                     <td>{member.height} cm</td>
                     <td>{member.weight} Kg</td>
                     <td>{member.gender}</td>
-                    <td>{member.subscription}</td>
+                    <td>{member.subscription.toUpperCase()}</td>
                     <td>
                       {activeRow === member._id ? (
                         <div className="expanded-actions my-flex-row">

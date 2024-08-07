@@ -8,26 +8,22 @@
   font-weight: bold;
 }
 
-/* Flex container for title and utility buttons */
 .content-title-holder {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* Flex row styling */
 .my-flex-row {
   display: flex;
   align-items: center;
 }
 
-/* Utility holder styling */
 .utility-holder {
   display: flex;
   gap: 10px;
 }
 
-/* Utility button styling */
 .utl-btn {
   display: flex;
   align-items: center;
@@ -61,10 +57,9 @@
   background: transparent;
 }
 
-/* Hide scrollbar for other browsers */
 .table-wrapper {
-  -ms-overflow-style: none; /* Internet Explorer and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Ensure the table takes full width and collapses borders */
@@ -128,12 +123,10 @@ tbody tr:hover {
   padding: 5px 10px;
 }
 
-/* Margin-left utility class */
 .ml-2 {
   margin-left: 5px;
 }
 
-/* Add Member button styling */
 #add_mbr_btn {
   background-color: #4caf50;
   color: #fff;
@@ -143,7 +136,6 @@ tbody tr:hover {
   background-color: #45a049;
 }
 
-/* Active row styling */
 .expanded-actions {
   display: flex;
   align-items: center;
@@ -154,7 +146,6 @@ tbody tr:hover {
   align-items: center;
 }
 
-/* Active button styling */
 .btn-secondary {
   background-color: #6c757d;
   color: white;
@@ -170,12 +161,10 @@ tbody tr:hover {
   color: white;
 }
 
-/* Deletion animation */
 .fade-slide-remove {
   animation: fadeSlideRemove 0.5s forwards;
 }
 
-/* Keyframes for fade and slide up animation */
 @keyframes fadeSlideRemove {
   0% {
     opacity: 1;
@@ -183,6 +172,6 @@ tbody tr:hover {
   }
   100% {
     opacity: 0;
-    transform: translateY(-20px); /* Adjust slide distance as needed */
+    transform: translateY(-20px);
   }
 }
