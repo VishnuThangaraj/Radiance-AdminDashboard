@@ -10,6 +10,7 @@ function Membership() {
     duration: "",
     price: "",
   });
+  const [selectedPlanId, setSelectedPlanId] = useState(null);
 
   useEffect(() => {
     const fetchMemberships = async () => {
@@ -44,6 +45,14 @@ function Membership() {
     setNewPlan({ ...newPlan, [name]: value });
   };
 
+  const handleViewMembers = (planId) => {
+    setSelectedPlanId(planId);
+  };
+
+  const handleCloseList = () => {
+    setSelectedPlanId(null);
+  };
+
   return (
     <div id="membership-section" className="display-area">
       <div className="content-title" data-aos="fade-right">
@@ -57,7 +66,7 @@ function Membership() {
         data-aos="fade-left"
         data-aos-delay="200"
       >
-        <div className="form-holder ">
+        <div className="form-holder">
           <input
             type="text"
             name="name"
@@ -98,7 +107,7 @@ function Membership() {
                 <th style={{ width: "15%" }}>Membership Name</th>
                 <th style={{ width: "15%" }}>Duration</th>
                 <th style={{ width: "10%" }}>Price</th>
-                <th style={{ width: "10%" }}>Action</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -112,7 +121,12 @@ function Membership() {
                     </td>
                     <td>&#8377; {plan.price}</td>
                     <td>
-                      <div className="btn btn-primary">View Members</div>
+                      <div
+                        className="btn btn-primary btn-viewmembers"
+                        onClick={() => handleViewMembers(plan._id)}
+                      >
+                        View Members
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -131,6 +145,9 @@ function Membership() {
           </table>
         </div>
       </div>
+      {selectedPlanId && (
+        <ViewMembership planId={selectedPlanId} onClose={handleCloseList} />
+      )}
     </div>
   );
 }

@@ -30,7 +30,6 @@ const EditMemberForm = ({ memberId, onClose, onSave }) => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
           setMember(data);
         } else {
           console.error("Failed to fetch member details");

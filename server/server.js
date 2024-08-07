@@ -439,6 +439,44 @@ app.get("/member-data/:id", async (req, res) => {
   }
 });
 
+// Fetch Members by Membership ID
+app.get("/get-members/:membershipId", async (req, res) => {
+  const { membershipId } = req.params;
+
+  try {
+    const subscriptions = await Subscription.find({
+      membership_id: membershipId,
+    });
+
+    if (subscriptions.length > 0) {
+      const memberIds = subscriptions.map(
+        (subscription) => subscription.member_id
+      );
+
+      const members = await Member.find({ _id: { $in: memberIds } });
+
+      const membersWithDates = members.map((member) => {
+        const subscription = subscriptions.find(
+          (sub) => sub.member_id.toString() === member._id.toString()
+        );
+
+        return {
+          ...member.toObject(),
+          start_date: subscription.start_date,
+          end_date: subscription.end_date,
+          payment_status: subscription.payment_status,
+        };
+      });
+
+      res.status(200).json(membersWithDates);
+    } else {
+      res.status(200).json({});
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching members", error });
+  }
+});
+
 // Update Trainer by ID
 app.put("/trainer-data/:id", async (req, res) => {
   try {
@@ -461,38 +499,49 @@ app.put("/trainer-data/:id", async (req, res) => {
 // Update member by ID
 app.put("/member-data/:id", async (req, res) => {
   const memberId = req.params.id;
-  const { member } = req.body;
-
-  console.log(member);
-  return;
+  const {
+    name,
+    email,
+    phone,
+    address,
+    height,
+    weight,
+    age,
+    gender,
+    trainer_id,
+    subscriptionId,
+  } = req.body;
 
   try {
     // Update the member details
     const member = await Member.findByIdAndUpdate(
       memberId,
       {
-        name,
-        email,
-        phone,
-        address,
-        height,
-        weight,
-        age,
-        gender,
-        trainer_id,
+        name: name,
+        email: email,
+        phone: phone,
+        address: address,
+        height: height,
+        weight: weight,
+        age: age,
+        gender: gender,
+        trainer_id: trainer_id,
       },
       { new: true }
     );
 
     // Update or create the subscription details
     let subscriptionDoc = await Subscription.findOne({ member_id: memberId });
+    let MembershipDoc = await Membership.findById(subscriptionId);
 
-    const startDate = moment(start_date);
-    const endDate = startDate.add(1, "month").format("YYYY-MM-DD");
+    const startDate = moment(subscriptionDoc.start_date);
+    const endDate = startDate
+      .add(MembershipDoc.duration, "month")
+      .format("YYYY-MM-DD");
 
     if (subscriptionDoc) {
-      subscriptionDoc.name = subscription;
-      subscriptionDoc.start_date = start_date;
+      subscriptionDoc.name = MembershipDoc.name;
+      subscriptionDoc.membership_id = subscriptionId;
       subscriptionDoc.end_date = endDate;
     }
 

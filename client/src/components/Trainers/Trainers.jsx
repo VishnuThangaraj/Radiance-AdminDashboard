@@ -102,7 +102,7 @@ const Trainers = () => {
                 <th style={{ width: "10%" }}>Weight</th>
                 <th style={{ width: "10%" }}>Gender</th>
                 <th style={{ width: "5%" }}>Status</th>
-                <th style={{ width: "20%" }}>Action</th>
+                <th style={{ width: "20%", textAlign: "center" }}>Action</th>
               </tr>
             </thead>
             <tbody>

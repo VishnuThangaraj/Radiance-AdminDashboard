@@ -1,83 +1,66 @@
-/* Overlay for the view member component */
 .view-member-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.616);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
 }
 
-/* Main container for the view member modal */
-.view-member {
+.vieqw-member {
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  width: 90%;
-  max-width: 600px;
-  position: relative;
+  border-radius: 8px;
+  width: 50%;
+  max-width: 800px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-}
-
-/* Close button */
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: transparent;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #333;
-}
-
-.close-btn:hover {
-  transform: scaleX(1.05);
-}
-
-/* Container for profile details and image */
-.view-member-content {
-  display: flex;
-  gap: 20px;
-  width: 100%;
-}
-
-/* Profile details */
-.profile-details {
-  flex: 1;
+  margin-bottom: 20px;
 }
 
 .modal-title {
   margin: 0;
-  font-size: 1.5rem;
-  color: #333;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
+  font-size: 24px;
 }
 
-.profile-details p {
-  margin: 10px 0;
-  font-size: 1rem;
-  color: #555;
+.close-btn {
+  border: none;
+  background: #dc3545;
+  color: #fff;
+  cursor: pointer;
 }
 
-.profile-details strong {
-  color: #333;
+.members-table {
+  margin-top: 20px;
 }
 
-/* Profile image container */
-.profile-image {
-  flex: 0 0 200px; /* Fixed width for the image */
-}
-
-.profile-image img {
+.members-table table {
   width: 100%;
-  height: auto;
-  border-radius: 8px;
+  border-collapse: collapse;
+}
+
+.members-table th,
+.members-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.members-table th {
+  background-color: #f4f4f4;
+}
+
+.no-members {
+  text-align: center;
+  font-size: 18px;
+  color: #888;
+  margin-top: 20px;
 }

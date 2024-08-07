@@ -37,3 +37,6 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+.btn-viewmembers:hover {
+  transform: scalex(1.05);
+}
