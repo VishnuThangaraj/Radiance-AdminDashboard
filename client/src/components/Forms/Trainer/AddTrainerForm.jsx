@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./AddTrainerForm.css";
+import "./AddTrainerForm.scss";
 
 const AddTrainerForm = ({ onClose }) => {
   const [name, setName] = useState("");

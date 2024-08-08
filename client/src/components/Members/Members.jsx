@@ -12,7 +12,7 @@ import AddMemberForm from "../Forms/Member/AddMemberForm";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import MemberProfile from "../ViewMember/ViewMember";
 import EditMemberForm from "../Forms/Member/EditMemberForm";
-import "./Members.css";
+import "./Members.scss";
 
 const Members = () => {
   const [members, setMembers] = useState([]);

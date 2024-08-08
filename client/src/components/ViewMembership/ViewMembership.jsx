@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./ViewMembership.css";
+import "./ViewMembership.scss";
 
 const ViewMembership = ({ planId, onClose }) => {
   const [members, setMembers] = useState([]);

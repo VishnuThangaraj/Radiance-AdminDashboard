@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import "./ViewTrainer.css";
+import "./ViewTrainer.scss";
 
 const ViewTrainer = ({ trainerId, onClose }) => {
   const [trainer, setTrainer] = useState(null);

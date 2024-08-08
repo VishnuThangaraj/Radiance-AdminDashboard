@@ -10,7 +10,7 @@ import {
   mdiCreditCardOutline,
   mdiCrown,
 } from "@mdi/js";
-import "./Sidebar.css";
+import "./Sidebar.scss";
 
 const Sidebar = ({ userRole }) => {
   const navigate = useNavigate();

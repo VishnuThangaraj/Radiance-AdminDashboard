@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "@mdi/react";
 import { mdiMail, mdiBell, mdiMagnify } from "@mdi/js";
-import "./Navbar.css";
+import "./Navbar.scss";
 
 const Navbar = ({ userDtls }) => {
   const userName = userDtls.name;

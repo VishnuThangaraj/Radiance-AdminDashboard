@@ -11,7 +11,7 @@ import {
 } from "@mdi/js";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import ViewMembership from "../ViewMembership/ViewMembership";
-import "./Membership.css";
+import "./Membership.scss";
 
 function Membership() {
   const [plans, setPlans] = useState([]);

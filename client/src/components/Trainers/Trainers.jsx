@@ -11,7 +11,7 @@ import {
 import AddTrainerForm from "../Forms/Trainer/AddTrainerForm";
 import TrainerProfile from "../ViewTrainer/ViewTrainer";
 import EditTrainerForm from "../Forms/Trainer/EditTrainerForm";
-import "./Trainers.css";
+import "./Trainers.scss";
 
 const Trainers = () => {
   const [trainers, setTrainers] = useState([]);

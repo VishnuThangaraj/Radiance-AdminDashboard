@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import "./EditMemberForm.css";
+import "./EditMemberForm.scss";
 
 const EditMemberForm = ({ memberId, onClose, onSave }) => {
   const [member, setMember] = useState({

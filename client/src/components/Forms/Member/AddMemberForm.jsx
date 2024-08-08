@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import "./AddMemberForm.css";
+import "./AddMemberForm.scss";
 
 const AddMemberForm = ({ onClose }) => {
   const [name, setName] = useState("");

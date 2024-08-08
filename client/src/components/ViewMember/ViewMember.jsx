@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./ViewMember.css";
+import "./ViewMember.scss";
 
 const ViewMember = ({ memberId, onClose }) => {
   const [member, setMember] = useState(null);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import "./EditTrainerForm.css";
+import "./EditTrainerForm.scss";
 
 const EditTrainerForm = ({ trainerId, onClose, onSave }) => {
   const [trainer, setTrainer] = useState({
