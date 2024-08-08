@@ -369,6 +369,58 @@ app.get("/get-membership", async (req, res) => {
   }
 });
 
+// Fetch Payment Details
+app.get("/get-payments", async (req, res) => {
+  try {
+    const members = await Member.aggregate([
+      {
+        $match: { role: "member" },
+      },
+      {
+        $lookup: {
+          from: "subscriptions",
+          localField: "_id",
+          foreignField: "member_id",
+          as: "subscription_details",
+        },
+      },
+      {
+        $unwind: "$subscription_details",
+      },
+      {
+        $lookup: {
+          from: "memberships",
+          localField: "subscription_details.membership_id",
+          foreignField: "_id",
+          as: "membership_details",
+        },
+      },
+      {
+        $unwind: "$membership_details",
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          username: 1,
+          "subscription_details.start_date": 1,
+          "subscription_details.end_date": 1,
+          "subscription_details.payment_status": 1,
+          "membership_details.name": 1,
+          "membership_details.duration": 1,
+          "membership_details.price": 1,
+        },
+      },
+    ]);
+
+    res.status(200).json(members);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving lead members", error: err });
+  }
+});
+
 // Fetch Trainer by ID
 app.get("/trainer-data/:id", async (req, res) => {
   const trainerId = req.params.id;

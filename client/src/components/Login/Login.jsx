@@ -35,7 +35,7 @@ const Login = ({ onLogin }) => {
                     src="images/login.jpg"
                     alt="login form"
                     className="img-fluid"
-                    style={{ borderRadius: "1rem 0 0 1rem" }}
+                    style={{ borderRadius: "1rem 0 0 1rem", height: "100%" }}
                   />
                 </div>
                 <div className="col-md-6 col-lg-7 d-flex align-items-center">

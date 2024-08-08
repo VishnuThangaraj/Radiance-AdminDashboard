@@ -14,6 +14,7 @@ import Loading from "./components/Loader/Loading";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import Trainers from "./components/Trainers/Trainers";
 import Membership from "./components/Membership/Membership";
+import Payment from "./components/Payment/Payment";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -130,6 +131,7 @@ const App = () => {
                   <>
                     <Navbar userDtls={user} />
                     <Sidebar userRole={user.role} />
+                    <Payment />
                   </>
                 ) : (
                   <Navigate to="/home" />
