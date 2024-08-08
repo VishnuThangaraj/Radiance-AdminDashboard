@@ -1,10 +1,12 @@
-.add-membership {
+.add-membership,
+.edit-membership-form {
   background-color: white;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   padding: 20px;
 }
-.form-holder input {
+.form-holder input,
+.edit-membership-form input {
   margin-inline: 20px;
 
   width: 25%;
@@ -39,4 +41,17 @@
 }
 .btn-viewmembers:hover {
   transform: scalex(1.05);
+}
+.membership-row {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.confirmation-queue {
+  background-color: #f8d7da; /* Optional: highlight the row to indicate it's in deletion queue */
+}
+
+.fade-slide-remove {
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none; /* Optional: prevent interactions with the fading row */
 }

@@ -11,6 +11,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Login from "./components/Login/Login";
 import Members from "./components/Members/Members";
 import Loading from "./components/Loader/Loading";
+import { SnackbarProvider, useSnackbar } from "notistack";
 import Trainers from "./components/Trainers/Trainers";
 import Membership from "./components/Membership/Membership";
 
@@ -39,139 +40,143 @@ const App = () => {
   if (loading) return <Loading />;
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to={user ? "/home" : "/login"} />} />
-        <Route
-          path="/login"
-          element={
-            user ? (
-              <Navigate to="/home" />
-            ) : (
-              <Login
-                onLogin={async (username) => {
-                  await fetchUserProfile();
-                  window.location.href = "/home";
-                }}
-              />
-            )
-          }
-        />
-        <Route
-          path="/home"
-          element={
-            user ? (
-              user.role === "admin" ? (
-                <>
-                  <Navbar userDtls={user} />
-                  <Sidebar userRole={user.role} />
-                </>
-              ) : (
-                <>
-                  <Navbar userDtls={user} />
-                  <Sidebar userRole={user.role} />
-                </>
-              )
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/member"
-          element={
-            user ? (
-              user.role === "admin" ? (
-                <>
-                  <Navbar userDtls={user} />
-                  <Members />
-                  <Sidebar userRole={user.role} />
-                </>
-              ) : (
-                <>
-                  <Navbar userDtls={user} />
-                  <Sidebar userRole={user.role} />
-                  {/* <MemberCalendar User_Data={user} /> */}
-                </>
-              )
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/trainer"
-          element={
-            user ? (
-              user.role === "admin" ? (
-                <>
-                  <Navbar userDtls={user} />
-                  <Sidebar userRole={user.role} />
-                  <Trainers />
-                </>
-              ) : (
+    <SnackbarProvider maxSnack={3}>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={<Navigate to={user ? "/home" : "/login"} />}
+          />
+          <Route
+            path="/login"
+            element={
+              user ? (
                 <Navigate to="/home" />
-              )
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/payment"
-          element={
-            user ? (
-              user.role === "admin" ? (
-                <>
-                  <Navbar userDtls={user} />
-                  <Sidebar userRole={user.role} />
-                </>
               ) : (
-                <Navigate to="/home" />
+                <Login
+                  onLogin={async (username) => {
+                    await fetchUserProfile();
+                    window.location.href = "/home";
+                  }}
+                />
               )
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/membership"
-          element={
-            user ? (
-              user.role === "admin" ? (
-                <>
-                  <Navbar userDtls={user} />
-                  <Sidebar userRole={user.role} />
-                  <Membership />
-                </>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              user ? (
+                user.role === "admin" ? (
+                  <>
+                    <Navbar userDtls={user} />
+                    <Sidebar userRole={user.role} />
+                  </>
+                ) : (
+                  <>
+                    <Navbar userDtls={user} />
+                    <Sidebar userRole={user.role} />
+                  </>
+                )
               ) : (
-                <Navigate to="/home" />
+                <Navigate to="/login" />
               )
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/calendar"
-          element={
-            user ? (
-              user.role === "admin" ? (
-                <>
-                  <Navbar userDtls={user} />
-                  {/* <AdminCalendar user={user} /> */}
-                  <Sidebar userRole={user.role} />
-                </>
+            }
+          />
+          <Route
+            path="/member"
+            element={
+              user ? (
+                user.role === "admin" ? (
+                  <>
+                    <Navbar userDtls={user} />
+                    <Members />
+                    <Sidebar userRole={user.role} />
+                  </>
+                ) : (
+                  <>
+                    <Navbar userDtls={user} />
+                    <Sidebar userRole={user.role} />
+                    {/* <MemberCalendar User_Data={user} /> */}
+                  </>
+                )
               ) : (
-                <Navigate to="/home" />
+                <Navigate to="/login" />
               )
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-      </Routes>
-    </Router>
+            }
+          />
+          <Route
+            path="/trainer"
+            element={
+              user ? (
+                user.role === "admin" ? (
+                  <>
+                    <Navbar userDtls={user} />
+                    <Sidebar userRole={user.role} />
+                    <Trainers />
+                  </>
+                ) : (
+                  <Navigate to="/home" />
+                )
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/payment"
+            element={
+              user ? (
+                user.role === "admin" ? (
+                  <>
+                    <Navbar userDtls={user} />
+                    <Sidebar userRole={user.role} />
+                  </>
+                ) : (
+                  <Navigate to="/home" />
+                )
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/membership"
+            element={
+              user ? (
+                user.role === "admin" ? (
+                  <>
+                    <Navbar userDtls={user} />
+                    <Sidebar userRole={user.role} />
+                    <Membership />
+                  </>
+                ) : (
+                  <Navigate to="/home" />
+                )
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/calendar"
+            element={
+              user ? (
+                user.role === "admin" ? (
+                  <>
+                    <Navbar userDtls={user} />
+                    <Sidebar userRole={user.role} />
+                  </>
+                ) : (
+                  <Navigate to="/home" />
+                )
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+        </Routes>
+      </Router>
+    </SnackbarProvider>
   );
 };
 

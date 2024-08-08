@@ -342,12 +342,30 @@ app.get("/get-members", async (req, res) => {
 // Fetch Membership
 app.get("/get-membership", async (req, res) => {
   try {
-    const memberships = await Membership.find();
+    const memberships = await Membership.aggregate([
+      {
+        $lookup: {
+          from: "subscriptions",
+          localField: "_id",
+          foreignField: "membership_id",
+          as: "subscriptions",
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          duration: 1,
+          price: 1,
+          num_members: { $size: "$subscriptions" },
+        },
+      },
+    ]);
+
     res.status(200).json(memberships);
   } catch (err) {
     res
       .status(500)
-      .json({ message: "Error retrieving Membership", errror: err });
+      .json({ message: "Error retrieving Membership", error: err });
   }
 });
 
@@ -557,6 +575,27 @@ app.put("/member-data/:id", async (req, res) => {
   }
 });
 
+// Update Membership By ID
+app.put("/update-membership/:id", async (req, res) => {
+  const { name, duration, price } = req.body;
+  const membershipId = req.params.id;
+
+  try {
+    await Membership.findByIdAndUpdate(
+      membershipId,
+      {
+        name: name,
+        duration: duration,
+        price: price,
+      },
+      { new: true }
+    );
+    res.status(200).json({ message: "Membership Updated Successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Error Updating Membership", error: err });
+  }
+});
+
 // Delete Trainer by ID
 app.delete("/del-trainer/:id", async (req, res) => {
   try {
@@ -589,6 +628,37 @@ app.delete("/del-member/:id", async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ message: "Error deleting Member", error: err });
+  }
+});
+
+app.delete("/del-membership/:id", async (req, res) => {
+  const membershipId = req.params.id;
+
+  try {
+    const subscriptionCount = await Subscription.countDocuments({
+      membership_id: membershipId,
+    });
+
+    if (subscriptionCount > 0) {
+      res.status(400).json({
+        message:
+          "Cannot delete membership plan as it has active subscriptions.",
+      });
+    } else {
+      const result = await Membership.findByIdAndDelete(membershipId);
+
+      if (result) {
+        res
+          .status(200)
+          .json({ message: "Membership Plan Deleted Successfully" });
+      } else {
+        res.status(404).json({ message: "Membership Plan Not Found!" });
+      }
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error Deleting Membership Plan", error: err });
   }
 });
 

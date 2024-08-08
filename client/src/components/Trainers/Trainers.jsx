@@ -8,9 +8,9 @@ import {
   mdiAccountOff,
   mdiArrowLeft,
 } from "@mdi/js";
-import AddTrainerForm from "../Forms/AddTrainerForm";
+import AddTrainerForm from "../Forms/Trainer/AddTrainerForm";
 import TrainerProfile from "../ViewTrainer/ViewTrainer";
-import EditTrainerForm from "../Forms/EditTrainerForm";
+import EditTrainerForm from "../Forms/Trainer/EditTrainerForm";
 import "./Trainers.css";
 
 const Trainers = () => {

@@ -8,9 +8,10 @@ import {
   mdiAccountOff,
   mdiArrowLeft,
 } from "@mdi/js";
-import AddMemberForm from "../Forms/AddMemberForm";
+import AddMemberForm from "../Forms/Member/AddMemberForm";
+import { SnackbarProvider, useSnackbar } from "notistack";
 import MemberProfile from "../ViewMember/ViewMember";
-import EditMemberForm from "../Forms/EditMemberForm";
+import EditMemberForm from "../Forms/Member/EditMemberForm";
 import "./Members.css";
 
 const Members = () => {
@@ -20,6 +21,17 @@ const Members = () => {
   const [deletingRow, setDeletingRow] = useState(null);
   const [viewProfileId, setViewProfileId] = useState(null);
   const [editMemberId, setEditMemberId] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const showNotification = (message, type) => {
+    enqueueSnackbar(message, {
+      variant: type,
+      anchorOrigin: {
+        vertical: "top",
+        horizontal: "right",
+      },
+    });
+  };
 
   useEffect(() => {
     fetch("http://localhost:6969/get-members")
@@ -42,11 +54,14 @@ const Members = () => {
           setMembers((prevMembers) =>
             prevMembers.filter((member) => member._id !== id)
           );
+          showNotification("Member Removed Successfully", "success");
         } else {
           console.error("Failed to delete member");
+          showNotification("Unable to remove Member", "warning");
         }
       } catch (error) {
         console.error("Error deleting member:", error);
+        howNotification("Unable to remove Member", "warning");
       }
       setDeletingRow(null);
     }, 500);
