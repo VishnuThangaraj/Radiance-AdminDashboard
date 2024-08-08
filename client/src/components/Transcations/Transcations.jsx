@@ -22,7 +22,8 @@ const Transcations = ({ onClose }) => {
     <div className="transcations-overlay">
       <div className="transcations-card" ref={cardRef}>
         <h2>Transcations</h2>
-        <p>Your transaction details go here.</p>
+        <button>Export As PDF</button>
+        <p>No Transcation History.</p>
       </div>
     </div>
   );
