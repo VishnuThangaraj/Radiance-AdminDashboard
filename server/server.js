@@ -369,6 +369,19 @@ app.get("/get-membership", async (req, res) => {
   }
 });
 
+// Fetch Transcations
+app.get("/get-transcations", async (req, res) => {
+  try {
+    const transcations = await Transaction.find();
+    if (transcations.length > 0) res.status(200).json(transcations);
+    else res.status(201).json(transcations);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving Transcation", error: err });
+  }
+});
+
 // Fetch Payment Details
 app.get("/get-payments", async (req, res) => {
   try {
@@ -403,6 +416,7 @@ app.get("/get-payments", async (req, res) => {
           _id: 1,
           name: 1,
           username: 1,
+          "subscription_details._id": 1,
           "subscription_details.start_date": 1,
           "subscription_details.end_date": 1,
           "subscription_details.payment_status": 1,
@@ -544,6 +558,54 @@ app.get("/get-members/:membershipId", async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ message: "Error fetching members", error });
+  }
+});
+
+// Make Payment with Subscription ID
+app.post("/make-payment/:member_id", async (req, res) => {
+  const { amount, subId } = req.body;
+  const { member_id } = req.params;
+
+  // Validate the input
+  if (!amount || isNaN(amount) || amount <= 0) {
+    return res.status(400).json({ message: "Invalid amount" });
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(member_id)) {
+    return res.status(400).json({ message: "Invalid member ID" });
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(subId)) {
+    return res.status(400).json({ message: "Invalid subscription ID" });
+  }
+
+  try {
+    const newTransaction = new Transaction({
+      member_id: member_id,
+      payment: amount,
+    });
+
+    await newTransaction.save();
+
+    // Update the subscription
+    const subscriptionUpdate = await Subscription.findByIdAndUpdate(
+      subId,
+      { payment_status: true },
+      { new: true }
+    );
+
+    if (!subscriptionUpdate) {
+      return res.status(404).json({ message: "Subscription not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Payment made and subscription updated successfully" });
+  } catch (error) {
+    console.error("Error making payment:", error);
+    res
+      .status(500)
+      .json({ message: "Error making payment", error: error.message });
   }
 });
 

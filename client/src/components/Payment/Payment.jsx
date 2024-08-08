@@ -4,11 +4,16 @@ import Icon from "@mdi/react";
 import axios from "axios";
 import { mdiPrinterOutline, mdiCashClock } from "@mdi/js";
 import Transcations from "../Transcations/Transcations";
+import PaymentPopup from "../PaymentPopup/PaymentPopup"; // Import the popup component
 import "./Payment.scss";
 
 function Payment() {
   const [payments, setPayments] = useState([]);
   const [showTranscations, setShowTranscations] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedAmount, setSelectedAmount] = useState(null);
+  const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedSub, setSelectedSub] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
 
   const showNotification = (message, type) => {
@@ -26,7 +31,6 @@ function Payment() {
       try {
         const response = await axios.get(`http://localhost:6969/get-payments`);
         setPayments(response.data);
-        console.log(response.data);
       } catch (err) {
         console.log("Error Fetching Payments Data", err);
       }
@@ -59,6 +63,30 @@ function Payment() {
 
   const handleTranscationsClose = () => {
     setShowTranscations(false);
+  };
+
+  const handlePayClick = (amount, sub_id, member_id) => {
+    setSelectedAmount(amount);
+    setSelectedSub(sub_id);
+    setSelectedMember(member_id);
+    setShowPopup(true);
+  };
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+  };
+
+  const handlePaymentConfirm = () => {
+    showNotification("Payment Successful!", "success");
+    setShowPopup(false);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
+  const handlePaymentFailure = () => {
+    showNotification("Payment Failure !", "warning");
+    setShowPopup(false);
   };
 
   return (
@@ -145,7 +173,16 @@ function Payment() {
                           PAID
                         </div>
                       ) : (
-                        <div className="btn btn-primary payment-btn px-4">
+                        <div
+                          className="btn btn-primary payment-btn px-4"
+                          onClick={() =>
+                            handlePayClick(
+                              pay.membership_details.price,
+                              pay.subscription_details._id,
+                              pay._id
+                            )
+                          }
+                        >
                           PAY
                         </div>
                       )}
@@ -168,6 +205,16 @@ function Payment() {
         </div>
       </div>
       {showTranscations && <Transcations onClose={handleTranscationsClose} />}
+      {showPopup && (
+        <PaymentPopup
+          amount={selectedAmount}
+          memberId={selectedMember}
+          subId={selectedSub}
+          onClose={handlePopupClose}
+          onPay={handlePaymentConfirm}
+          onFail={handlePaymentFailure}
+        />
+      )}
     </div>
   );
 }

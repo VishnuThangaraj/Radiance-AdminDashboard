@@ -1,0 +1,70 @@
+.payment-popup-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.payment-popup {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.slide-to-pay {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  background: #e0e0e0;
+  border-radius: 25px;
+  margin-top: 20px;
+  cursor: pointer;
+  overflow: hidden;
+  user-select: none; /* Prevent text selection */
+}
+
+.slide-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: #4caf50;
+  border-radius: 25px;
+  transition: width 0.1s ease;
+  user-select: none; /* Prevent text selection */
+}
+
+.slider-icon {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  font-size: 24px;
+  color: #4caf50;
+  transition: left 0.1s ease;
+}
+
+.slide-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  white-space: nowrap;
+  color: black;
+  font-weight: bold;
+  transition: color 0.1s ease;
+  user-select: none; /* Prevent text selection */
+}
+
+.slide-text.touched {
+  color: white;
+}

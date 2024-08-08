@@ -15,7 +15,7 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  max-width: 500px;
+  max-width: 560px;
   width: 100%;
   text-align: center;
 }
@@ -28,4 +28,7 @@
   border-radius: 4px;
   cursor: pointer;
   margin-top: 20px;
+}
+.printer-btn:hover {
+  transform: scale(1.05);
 }
