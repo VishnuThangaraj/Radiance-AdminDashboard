@@ -11,6 +11,7 @@ import {
 import AddTrainerForm from "../Forms/Trainer/AddTrainerForm";
 import TrainerProfile from "../ViewTrainer/ViewTrainer";
 import EditTrainerForm from "../Forms/Trainer/EditTrainerForm";
+import html2pdf from "html2pdf.js";
 import "./Trainers.scss";
 
 const Trainers = () => {
@@ -53,6 +54,69 @@ const Trainers = () => {
     }, 500);
   };
 
+  const fetchAndGeneratePDF = async () => {
+    try {
+      const data = trainers;
+
+      const htmlContent = `
+  <div style="font-family: Arial, sans-serif; padding: 20px; margin: 0; position: relative; min-height: 1000px;">
+    <div style="text-align: center; white-space: nowrap;">
+      <h2 style="margin: 0;">Radiance Yoga Center</h2>
+    </div>
+    <div class="sub" style="text-align:center;">
+    <div>Payment List</div>
+    </div>
+    <hr style="border: 1px solid #ddd; margin: 20px 0;" />
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;">
+      <thead>
+        <tr style="background-color: #f2f2f2;">
+          <th>ID</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Age</th>
+          <th>Height</th>
+          <th>Weight</th>
+          <th>Gender</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data
+          .map(
+            (trainer) => `
+          <tr>
+            <td>${trainer.username}</td>
+            <td>${trainer.name}</td>
+            <td>${trainer.phone}</td>
+            <td>${trainer.age}</td>
+            <td>${trainer.height} cm</td>
+            <td>${trainer.weight} Kg</td>
+            <td>${trainer.gender}</td>
+          </tr>`
+          )
+          .join("")}
+      </tbody>
+    </table>
+    <footer style="text-align: center; font-size: 10px; position: absolute; bottom: 0; width: 100%; border-top: 1px solid #ddd; padding: 10px 0; background-color: #fff;">
+      © Radiance Yoga Center    |    12 Alpha Street, Coimbatore    |    +91 6383 580 965
+    </footer>
+  </div>
+`;
+
+      // Convert HTML content to PDF
+      const opt = {
+        margin: 0,
+        filename: "Trainers_List (Radiance Yoga Center).pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "pt", format: "a4", orientation: "portrait" },
+      };
+
+      html2pdf().from(htmlContent).set(opt).save();
+    } catch (error) {
+      console.error("Error fetching or generating PDF:", error);
+    }
+  };
+
   const handleEdit = (id) => {
     setEditTrainerId(id);
   };
@@ -74,6 +138,7 @@ const Trainers = () => {
           <div
             className="btn btn-outline-info utl-btn"
             data-aos="fade-left"
+            onClick={fetchAndGeneratePDF}
             data-aos-anchor="#example-anchor"
             data-aos-offset="500"
             data-aos-duration="500"

@@ -5,11 +5,12 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const nodemailer = require("nodemailer");
+const Calendar = require("./models/Calendar");
 const Member = require("./models/Member");
+const Membership = require("./models/Membership");
 const Subscription = require("./models/Subscription");
 const Trainer = require("./models/Trainer");
 const Transaction = require("./models/Transcation");
-const Membership = require("./models/Membership");
 const bcrypt = require("bcryptjs");
 const moment = require("moment");
 
@@ -139,25 +140,74 @@ app.post("/register-trainer", async (req, res) => {
     const mailOptions = {
       from: `vishnuthangaraj.vedhanthi@gmail.com`,
       to: email,
-      subject: `Your Trainer ID and Password Have Been Created | Radiance Yoga`,
-      text: `Hello ${name},
-We are pleased to inform you that your Trainer ID and Password have been successfully created. Below are your login details:
-
-Trainer ID: ${username}
-Password: ${password}
-
-To access your account, please follow these steps:
-
-Visit our Company Portal/Website at http://localhost:${port}/login.
-Enter your Trainer ID and password.
-Should you encounter any issues or have any questions, please do not hesitate to contact our IT support team at support@radiance.com or +91 6584 857 496.
-
-We are excited to have you on board and look forward to your contributions to the team.
-
-Best regards,
-Vishnu Thangaraj
-vishnuthangaraj@radiance.com
-+91 6383 580 966`,
+      subject: `Welcome to Radiance Yoga Center | Your Trainer Registration Details`,
+      html: `
+    <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+          .header {height:180px; text-align: center; background: #f4f4f4; padding: 20px; border-bottom: 1px solid #ddd;background-image: url("https://static.vecteezy.com/system/resources/previews/029/353/586/non_2x/ai-generative-of-a-man-practicing-mindfulness-and-meditation-in-a-peaceful-natural-environment-sony-a7s-realistic-image-ultra-hd-high-design-very-detailed-free-photo.jpg"); background-size: cover; background-repeat: no-repeat; background-position: center center;}
+          .header img { max-width: 150px; }
+          .content { padding: 20px; }
+          h1 { color: #333; }
+          p { font-size: 14px; color: #555; }
+          .footer { background: #f4f4f4; padding: 20px; border-top: 1px solid #ddd; margin-top: 20px; }
+          .footer h2 { color: #333; font-size: 16px; }
+          .footer p { margin: 0; font-size: 14px; color: #666; }
+          .section { margin-bottom: 20px; }
+          .section h3 { color: #333; font-size: 14px; }
+          .section p { font-size: 14px; color: #555; }
+          .head-title{padding-top:0px; color:white;text-shadow:0px 0px 15px black;}
+          a { color: #1a73e8; text-decoration: none; }
+          a:hover { text-decoration: underline; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1 class="head-title">Radiance Yoga Center</h1>
+          </div>
+          <div class="content">
+            <p>Dear ${name},</p>
+            <p>Welcome to Radiance Yoga Center!</p>
+            <p>We are excited to have you join our team of trainers. Below are your registration details:</p>
+            <p><strong>Trainer ID:</strong> ${username}</p>
+            <p><strong>Password:</strong> ${password}</p>
+            <p>To access your trainer account and start managing your classes, please visit:</p>
+            <p><a href="http://localhost:${port}/login">http://localhost:${port}/login</a></p>
+            <p>Simply enter your Trainer ID and password to log in.</p>
+            <p>If you have any questions or need assistance, feel free to reach out to our support team:</p>
+            <ul>
+              <li>Email: <a href="mailto:support@radiance.com">support@radiance.com</a></li>
+              <li>Phone: +91 6584 857 496</li>
+            </ul>
+            <p>We look forward to working with you and helping our clients achieve their wellness goals.</p>
+            <p>Warm regards,</p>
+            <p>The Radiance Yoga Team</p>
+          </div>
+          <div class="footer">
+            <div class="section">
+              <h2>Contact Information</h2>
+              <p><strong>Radiance Yoga Center</strong></p>
+              <p>12, Alpha Street, Sulur, Coimbatore - 641402</p>
+              <p>Phone: 6383 580 946</p>
+            </div>
+            <div class="section">
+              <h2>Support</h2>
+              <p>If you need assistance, please contact our support team:</p>
+              <p>Email: <a href="mailto:support@radiance.com">support@radiance.com</a></p>
+              <p>Phone: +91 6584 857 496</p>
+            </div>
+            <div class="section">
+              <h2>Follow Us</h2>
+              <p>Stay connected with us on social media:</p>
+              <p>Facebook | Twitter | Instagram</p>
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>`,
     };
 
     transporter.sendMail(mailOptions);
@@ -188,7 +238,7 @@ app.post("/register-member", async (req, res) => {
     trainer_id,
   } = req.body;
 
-  let password = `admin123VT`;
+  let password = `${name}+1234`;
 
   try {
     const lastMember = await Member.findOne().sort({ _id: -1 });
@@ -230,32 +280,81 @@ app.post("/register-member", async (req, res) => {
 
     await newSubscription.save();
 
-    // Sending Mail (Replay)
+    // Sending Mail (Styled HTML)
     const mailOptions = {
       from: `vishnuthangaraj.vedhanthi@gmail.com`,
       to: email,
-      subject: `Your Member ID and Password Have Been Created | Radiance Yoga`,
-      text: `Hello ${name},
-We are pleased to inform you that your Member ID and password have been successfully created. Below are your login details:
-
-Member ID: ${username}
-Password: ${password}
-
-To access your account, please follow these steps:
-
-Visit our Company Portal/Website at http://localhost:${port}/login.
-Enter your Member ID and password.
-Should you encounter any issues or have any questions, please do not hesitate to contact our IT support team at support@radiance.com or +91 6584 857 496.
-
-We are excited to have you on board and look forward to your contributions to the team.
-
-Best regards,
-Vishnu Thangaraj
-vishnuthangaraj@radiance.com
-+91 6383 580 966`,
+      subject: `Welcome to Radiance Yoga Center | Your Membership Details`,
+      html: `
+        <html>
+          <head>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+              .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+              .header {height:180px; text-align: center; background: #f4f4f4; padding: 20px; border-bottom: 1px solid #ddd;background-image: url("https://static.vecteezy.com/system/resources/previews/029/353/586/non_2x/ai-generative-of-a-man-practicing-mindfulness-and-meditation-in-a-peaceful-natural-environment-sony-a7s-realistic-image-ultra-hd-high-design-very-detailed-free-photo.jpg"); background-size: cover; background-repeat: no-repeat; background-position: center center;}
+              .header img { max-width: 150px; }
+              .content { padding: 20px; }
+              h1 { color: #333; }
+              p { font-size: 14px; color: #555; }
+              .footer { background: #f4f4f4; padding: 20px; border-top: 1px solid #ddd; margin-top: 20px; }
+              .footer h2 { color: #333; font-size: 16px; }
+              .footer p { margin: 0; font-size: 14px; color: #666; }
+              .section { margin-bottom: 20px; }
+              .section h3 { color: #333; font-size: 14px; }
+              .section p { font-size: 14px; color: #555; }
+              .head-title{padding-top:0px; color:white;text-shadow:0px 0px 15px black;}
+              a { color: #1a73e8; text-decoration: none; }
+              a:hover { text-decoration: underline; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1 class="head-title">Radiance Yoga Center</h1>
+              </div>
+              <div class="content">
+                <p>Dear ${name},</p>
+                <p>Welcome to Radiance Yoga Center!</p>
+                <p>We are thrilled to have you join our yoga community. Below are your membership details:</p>
+                <p><strong>Member ID:</strong> ${username}</p>
+                <p><strong>Password:</strong> ${password}</p>
+                <p>To access your account and start your journey with us, please visit:</p>
+                <p><a href="http://localhost:${port}/login">http://localhost:${port}/login</a></p>
+                <p>Simply enter your Member ID and password to log in.</p>
+                <p>If you have any questions or need assistance, feel free to reach out to our support team:</p>
+                <ul>
+                  <li>Email: <a href="mailto:support@radiance.com">support@radiance.com</a></li>
+                  <li>Phone: +91 6584 857 496</li>
+                </ul>
+                <p>We look forward to seeing you at our center and helping you achieve your wellness goals.</p>
+                <p>Warm regards,</p>
+                <p>The Radiance Yoga Team</p>
+              </div>
+              <div class="footer">
+                <div class="section">
+                  <h2>Contact Information</h2>
+                  <p><strong>Radiance Yoga Center</strong></p>
+                  <p>12, Alpha Street, Sulur, Coimbatore - 641402</p>
+                  <p>Phone: 6383 580 946</p>
+                </div>
+                <div class="section">
+                  <h2>Support</h2>
+                  <p>If you need assistance, please contact our support team:</p>
+                  <p>Email: <a href="mailto:support@radiance.com">support@radiance.com</a></p>
+                  <p>Phone: +91 6584 857 496</p>
+                </div>
+                <div class="section">
+                  <h2>Follow Us</h2>
+                  <p>Stay connected with us on social media:</p>
+                  <p>Facebook | Twitter | Instagram</p>
+                </div>
+              </div>
+            </div>
+          </body>
+        </html>`,
     };
 
-    // transporter.sendMail(mailOptions);
+    transporter.sendMail(mailOptions);
 
     res.status(200).json({ message: "User registered", user: newMember });
   } catch (err) {
@@ -368,12 +467,12 @@ app.get("/get-membership", async (req, res) => {
   }
 });
 
-// Fetch Transcations
-app.get("/get-transcations", async (req, res) => {
+// Fetch Transaction
+app.get("/get-transactions", async (req, res) => {
   try {
-    const transcations = await Transaction.find();
-    if (transcations.length > 0) res.status(200).json(transcations);
-    else res.status(201).json(transcations);
+    const transactions = await Transaction.find();
+    if (transactions.length > 0) res.status(200).json(transactions);
+    else res.status(201).json(transactions);
   } catch (err) {
     res
       .status(500)
@@ -586,7 +685,6 @@ app.post("/make-payment/:member_id", async (req, res) => {
 
     await newTransaction.save();
 
-    // Update the subscription
     const subscriptionUpdate = await Subscription.findByIdAndUpdate(
       subId,
       { payment_status: true },

@@ -2,21 +2,22 @@ import React, { useRef, useEffect, useState } from "react";
 import axios from "axios";
 import Icon from "@mdi/react";
 import { mdiPrinterOutline } from "@mdi/js";
-import "./Transcations.scss";
+import html2pdf from "html2pdf.js";
+import "./Transactions.scss";
 
-const Transcations = ({ onClose }) => {
-  const [transcations, setTranscations] = useState([]);
+const Transactions = ({ onClose }) => {
+  const [transactions, setTransactions] = useState([]);
   const cardRef = useRef(null);
 
   useEffect(() => {
-    const getTranscations = async () => {
+    const getTransactions = async () => {
       const response = await axios.get(
-        `http://localhost:6969/get-transcations`
+        `http://localhost:6969/get-transactions`
       );
-      setTranscations(response.data);
+      setTransactions(response.data);
     };
 
-    getTranscations();
+    getTransactions();
 
     const handleClickOutside = (event) => {
       if (cardRef.current && !cardRef.current.contains(event.target)) {
@@ -30,6 +31,64 @@ const Transcations = ({ onClose }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [onClose]);
+
+  const fetchAndGeneratePDF = async () => {
+    try {
+      const data = transactions;
+
+      const htmlContent = `
+  <div style="font-family: Arial, sans-serif; padding: 20px; margin: 0; position: relative; min-height: 1000px;">
+    <div style="text-align: center; white-space: nowrap;">
+      <h2 style="margin: 0;">Radiance Yoga Center</h2>
+    </div>
+    <div class="sub" style="text-align:center;">
+    <div>Transcation History</div>
+    </div>
+    <hr style="border: 1px solid #ddd; margin: 20px 0;" />
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;">
+      <thead>
+        <tr style="background-color: #f2f2f2;">
+          <th style="padding: 8px; border: 1px solid #ddd;">Transaction ID</th>
+          <th style="padding: 8px; border: 1px solid #ddd;">Amount</th>
+          <th style="padding: 8px; border: 1px solid #ddd;">Date</th>
+          <th style="padding: 8px; border: 1px solid #ddd;">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data
+          .map(
+            (transaction) => `
+          <tr>
+            <td>RYC-TR${transaction._id.slice(15)}</td>
+            <td>₹ ${transaction.payment}</td>
+            <td>${formatDate(transaction.date.slice(0, 10))}</td>
+            <td>${formatDateToIST(transaction.date)}</td>
+          </tr>
+        `
+          )
+          .join("")}
+      </tbody>
+    </table>
+    <footer style="text-align: center; font-size: 10px; position: absolute; bottom: 0; width: 100%; border-top: 1px solid #ddd; padding: 10px 0; background-color: #fff;">
+      © Radiance Yoga Center    |    12 Alpha Street, Coimbatore    |    +91 6383 580 965
+    </footer>
+  </div>
+`;
+
+      // Convert HTML content to PDF
+      const opt = {
+        margin: 0,
+        filename: "Transcation_History (Radiance Yoga Center).pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "pt", format: "a4", orientation: "portrait" },
+      };
+
+      html2pdf().from(htmlContent).set(opt).save();
+    } catch (error) {
+      console.error("Error fetching or generating PDF:", error);
+    }
+  };
 
   const formatDateToIST = (dateString) => {
     const date = new Date(dateString);
@@ -89,12 +148,17 @@ const Transcations = ({ onClose }) => {
           <h2
             style={{ paddingInlineStart: "145px", paddingInlineEnd: "125px" }}
           >
-            Transcations{" "}
+            Transactions{" "}
           </h2>
-          <button className="btn btn-warning printer-btn py-1">
+          <button
+            onClick={fetchAndGeneratePDF}
+            className="btn btn-warning printer-btn py-1"
+          >
             <Icon path={mdiPrinterOutline} size={1} />
           </button>
         </div>
+
+        {/* The content you want to convert to PDF */}
         <div className="transcation-table-holder" data-aos="zoom0in">
           <div className="table-wrapper">
             <table id="transcation_table">
@@ -107,10 +171,10 @@ const Transcations = ({ onClose }) => {
                 </tr>
               </thead>
               <tbody>
-                {transcations.length > 0 ? (
-                  transcations.map((transcation) => (
+                {transactions.length > 0 ? (
+                  transactions.map((transcation) => (
                     <tr key={transcation._id}>
-                      <td>RYC-TR{transcation._id.slice(17)}</td>
+                      <td>RYC-TR{transcation._id.slice(15)}</td>
                       <td> ₹ {transcation.payment}</td>
                       <td>{formatDate(transcation.date.slice(0, 10))}</td>
                       <td>{formatDateToIST(transcation.date)}</td>
@@ -136,4 +200,4 @@ const Transcations = ({ onClose }) => {
   );
 };
 
-export default Transcations;
+export default Transactions;
