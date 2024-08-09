@@ -57,7 +57,6 @@ const ViewMember = ({ memberId, onClose }) => {
       "December",
     ];
 
-    // Get the day, month and year
     const day = date.getDate();
     const month = months[date.getMonth()];
     const year = date.getFullYear();

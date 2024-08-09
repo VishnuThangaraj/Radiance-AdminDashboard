@@ -106,7 +106,7 @@ function Payment() {
             data-aos-offset="500"
             data-aos-duration="500"
           >
-            <Icon path={mdiPrinterOutline} size={1} /> Export Data
+            <Icon path={mdiPrinterOutline} size={1} /> Export
           </div>
           <div
             className="btn btn-outline-success transcation-btn"

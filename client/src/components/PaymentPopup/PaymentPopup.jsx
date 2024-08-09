@@ -10,8 +10,7 @@ function PaymentPopup({ amount, onClose, onPay, onFail, subId, memberId }) {
   const [isSliding, setIsSliding] = useState(false);
   const [slidePosition, setSlidePosition] = useState(0);
   const [startPosition, setStartPosition] = useState(0);
-
-  useEffect(() => {
+  -+useEffect(() => {
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         onClose();

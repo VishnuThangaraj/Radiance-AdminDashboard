@@ -1,4 +1,3 @@
-/* Overlay for the view member component */
 .view-member-overlay {
   position: fixed;
   top: 0;
@@ -12,7 +11,6 @@
   z-index: 999;
 }
 
-/* Main container for the view member modal */
 .view-member {
   background: #fff;
   border-radius: 8px;
@@ -25,7 +23,6 @@
   align-items: center;
 }
 
-/* Close button */
 .close-btn {
   position: absolute;
   top: 10px;
@@ -41,14 +38,12 @@
   transform: scaleX(1.05);
 }
 
-/* Container for profile details and image */
 .view-member-content {
   display: flex;
   gap: 20px;
   width: 100%;
 }
 
-/* Profile details */
 .profile-details {
   flex: 1;
 }
@@ -73,7 +68,7 @@
 
 /* Profile image container */
 .profile-image {
-  flex: 0 0 200px; /* Fixed width for the image */
+  flex: 0 0 200px;
 }
 
 .profile-image img {

@@ -101,7 +101,6 @@ app.post("/login", async (req, res) => {
       }
     }
 
-    // If not found in either schema
     res.status(400).json({ error: "User not found" });
   } catch (err) {
     res.status(500).json({ error: "Server error" });

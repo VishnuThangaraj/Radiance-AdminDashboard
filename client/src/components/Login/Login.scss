@@ -10796,7 +10796,6 @@ textarea.form-control {
   user-select: none;
 }
 
-/* Hide the browser's default checkbox */
 .checkbox-wrap input {
   position: absolute;
   opacity: 0;
@@ -10805,14 +10804,12 @@ textarea.form-control {
   width: 0;
 }
 
-/* Create a custom checkbox */
 .checkmark {
   position: absolute;
   top: 0;
   left: 0;
 }
 
-/* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
   content: "\f0c8";
   font-family: "FontAwesome";
@@ -10832,7 +10829,6 @@ textarea.form-control {
   }
 }
 
-/* Show the checkmark when checked */
 .checkbox-wrap input:checked ~ .checkmark:after {
   display: block;
   content: "\f14a";
@@ -10840,7 +10836,6 @@ textarea.form-control {
   color: rgba(0, 0, 0, 0.2);
 }
 
-/* Style the checkmark/indicator */
 .checkbox-primary {
   color: #fbceb5;
 }
