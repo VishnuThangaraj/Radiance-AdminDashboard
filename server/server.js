@@ -5,6 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const nodemailer = require("nodemailer");
+const Attendance = require("./models/Attendance");
 const Calendar = require("./models/Calendar");
 const Member = require("./models/Member");
 const Membership = require("./models/Membership");
@@ -384,6 +385,26 @@ app.post("/register-membership", async (req, res) => {
   }
 });
 
+// Register Event (Calendar)
+app.post("/register-event", async (req, res) => {
+  const { name, date, access } = req.body;
+
+  try {
+    const newEvent = new Calendar({
+      name,
+      date: new Date(date),
+      access,
+    });
+
+    await newEvent.save();
+    res
+      .status(201)
+      .json({ message: "Event added successfully", event: newEvent });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // Fetch Trainers
 app.get("/get-trainers", async (req, res) => {
   try {
@@ -391,6 +412,58 @@ app.get("/get-trainers", async (req, res) => {
     res.status(200).json(trainers);
   } catch (err) {
     res.status(500).json({ message: "Error retrieving Trainers", error: err });
+  }
+});
+
+// Fetch Calendar
+app.get("/get-calendar", async (req, res) => {
+  try {
+    const calendars = await Calendar.find();
+    res.status(200).json({ calendars });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Fetch Attendance
+app.get("/get-attendance", async (req, res) => {
+  try {
+    const attendances = await Attendance.find();
+    res.status(200).json({ attendances });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Fetch Calendar and Attendance
+app.get("/get-calendar-attendance", async (req, res) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  try {
+    const calendars = await Calendar.find();
+
+    const trainerLoginCount = await Attendance.countDocuments({
+      action: "login",
+      role: "trainer",
+      timestamp: { $gte: today, $lt: tomorrow },
+    });
+
+    const memberLoginCount = await Attendance.countDocuments({
+      action: "login",
+      role: "member",
+      timestamp: { $gte: today, $lt: tomorrow },
+    });
+
+    res.status(200).json({
+      calendars,
+      trainerLoginCount,
+      memberLoginCount,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 

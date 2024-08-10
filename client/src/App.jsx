@@ -178,6 +178,14 @@ const App = () => {
               )
             }
           />
+          <Route
+            path="/attendance"
+            element={
+              <>
+                <Navbar />
+              </>
+            }
+          />
         </Routes>
       </Router>
     </SnackbarProvider>

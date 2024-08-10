@@ -62,7 +62,7 @@ const Members = () => {
         }
       } catch (error) {
         console.error("Error deleting member:", error);
-        howNotification("Unable to remove Member", "warning");
+        showNotification("Unable to remove Member", "warning");
       }
       setDeletingRow(null);
     }, 500);

@@ -1,0 +1,169 @@
+#member_calendar {
+  .display-area {
+    padding: 30px;
+    background-color: #f9fafb;
+    border-radius: 15px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    max-width: 1100px;
+    margin: 0 auto;
+    font-family: "Inter", sans-serif;
+  }
+
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .calendar-holder {
+    width: 100%;
+
+    .rbc-calendar {
+      background-color: #ffffff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      border: none;
+    }
+
+    .rbc-toolbar {
+      background-color: #00796b;
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 15px 15px 0 0;
+      font-weight: 600;
+
+      button {
+        background-color: #004d40;
+        border: none;
+        margin-inline-end: 5px;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #00362c;
+        }
+      }
+    }
+
+    .rbc-header {
+      background-color: #e0f2f1;
+      color: #00796b;
+      text-align: center;
+      padding: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .rbc-date-cell {
+      padding: 12px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .rbc-today {
+      background-color: #b2dfdb;
+      color: #004d40;
+      font-weight: bold;
+    }
+
+    .rbc-day-bg {
+      &:nth-child(7n + 1),
+      &:nth-child(7n) {
+        background-color: #f0f4f7;
+      }
+    }
+
+    .rbc-off-range-bg {
+      background-color: #e0e0e0;
+    }
+
+    .rbc-event {
+      background-color: #00796b;
+      border-radius: 8px;
+      color: white;
+      padding: 6px 10px;
+      font-size: 0.875rem;
+      text-align: center;
+      margin: 3px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .rbc-selected {
+      background-color: #004d40 !important;
+    }
+
+    .rbc-timeslot-group {
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .rbc-time-content {
+      border-top: 1px solid #00796b;
+    }
+
+    .rbc-time-header-cell {
+      padding: 15px;
+      text-align: center;
+      background-color: #f0f4f7;
+      border-right: 1px solid #e0e0e0;
+    }
+
+    .rbc-time-content > .rbc-time-gutter {
+      background-color: #f9fafb;
+    }
+  }
+}
+// .custom-event {
+//   background-color: #00796b;
+//   color: white;
+//   border-radius: 5px;
+//   padding: 2px 4px; /* Reduced padding */
+//   font-size: 0.75rem; /* Smaller font size */
+//   text-align: center;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+//   overflow: hidden; /* Hide overflow text if necessary */
+//   white-space: nowrap; /* Prevent text wrapping */
+//   text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+// }
+.custom-day {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 90px;
+  border-radius: 7%/10%;
+  box-shadow: 1px 1px 2px rgba(128, 128, 128, 0.356);
+}
+
+.day-info {
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.day-info div {
+  margin: 2px 0;
+}
+
+.rbc-date-cell {
+  text-align: right;
+  margin-inline-end: 0;
+}
+.rbc-date-cell {
+  border-inline: 1px solid #e0e0e0;
+}
+.evnt-pill,
+.member-pill,
+.trainer-pill {
+  // background-color: rgb(5, 116, 150);
+  // color: white;
+  width: 85px;
+  padding-inline-start: 5px;
+  border-radius: 28%/90%;
+  margin-bottom: 1px;
+}
