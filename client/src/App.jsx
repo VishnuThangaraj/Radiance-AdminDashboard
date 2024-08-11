@@ -16,6 +16,7 @@ import Trainers from "./components/Trainers/Trainers";
 import Membership from "./components/Membership/Membership";
 import Payment from "./components/Payment/Payment";
 import Calendar from "./components/Calendar/Calendar";
+import Attendance from "./components/Attendance/Attendance";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -182,7 +183,7 @@ const App = () => {
             path="/attendance"
             element={
               <>
-                <Navbar />
+                <Attendance />
               </>
             }
           />

@@ -26,7 +26,7 @@ const Calendar = () => {
         const data = await response.json();
 
         const counts = data.calendars.reduce((acc, event) => {
-          const date = new Date(event.date).toDateString(); // Normalize date
+          const date = new Date(event.date).toDateString();
           if (!acc[date]) {
             acc[date] = { trainers: 0, members: 0 };
           }
@@ -99,7 +99,7 @@ const Calendar = () => {
           ) : (
             <BigCalendar
               localizer={localizer}
-              events={[]} // No events passed to the calendar
+              events={[]}
               startAccessor="start"
               endAccessor="end"
               components={{
