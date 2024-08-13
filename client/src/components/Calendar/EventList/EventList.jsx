@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { SnackbarProvider, useSnackbar } from "notistack";
 import Icon from "@mdi/react";
 import { mdiDelete, mdiArrowLeft } from "@mdi/js";
 import "./EventList.scss";
@@ -6,6 +7,17 @@ import "./EventList.scss";
 const EventList = ({ events, onClose }) => {
   const [eventToDelete, setEventToDelete] = useState(null);
   const eventListRef = useRef(null);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const showNotification = (message, type) => {
+    enqueueSnackbar(message, {
+      variant: type,
+      anchorOrigin: {
+        vertical: "top",
+        horizontal: "right",
+      },
+    });
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -31,17 +43,23 @@ const EventList = ({ events, onClose }) => {
   const handleDeleteConfirm = async () => {
     try {
       const response = await fetch(
-        `http://localhost:6969/delete-event/${eventToDelete}`,
+        `http://localhost:6969/del-calendar/${eventToDelete}`,
         {
           method: "DELETE",
         }
       );
       if (response.ok) {
-        onClose(); // Close the event list after deletion, or re-fetch events
+        showNotification("Event Removed from the Calendar", "success");
+        onClose();
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       } else {
         console.error("Failed to delete event");
+        showNotification("Unable to Delete Event", "warning");
       }
     } catch (error) {
+      showNotification("Error Deleting Event", "error");
       console.error("Error deleting event:", error);
     }
   };
@@ -53,7 +71,7 @@ const EventList = ({ events, onClose }) => {
   return (
     <div className="event-list-overlay">
       <div className="event-list" ref={eventListRef}>
-        <h3>Events</h3>
+        <h3 className="text-center border-bottom pb-2">Events</h3>
         <ul>
           {events.map((event) => (
             <li key={event._id} className="event-item">

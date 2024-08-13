@@ -1003,6 +1003,7 @@ app.delete("/del-member/:id", async (req, res) => {
   }
 });
 
+// Delete Membership by ID
 app.delete("/del-membership/:id", async (req, res) => {
   const membershipId = req.params.id;
 
@@ -1031,6 +1032,24 @@ app.delete("/del-membership/:id", async (req, res) => {
     res
       .status(500)
       .json({ message: "Error Deleting Membership Plan", error: err });
+  }
+});
+
+// Delete Events(Calendar) by ID
+app.delete("/del-calendar/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const calendarObjectId = new mongoose.Types.ObjectId(id);
+
+    const result = await Calendar.findByIdAndDelete(id);
+
+    if (result) {
+      res.status(200).json({ message: "Event deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Event not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting Event", error: err });
   }
 });
 
