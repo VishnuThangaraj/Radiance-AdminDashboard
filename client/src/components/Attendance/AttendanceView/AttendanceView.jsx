@@ -15,6 +15,7 @@ const AttendanceView = ({ id, role, onClose }) => {
           if (response.ok) {
             const data = await response.json();
             setInfo(data);
+            fetchRecentLogin(data.username);
           } else {
             console.error("Failed to fetch details");
           }
@@ -24,33 +25,27 @@ const AttendanceView = ({ id, role, onClose }) => {
       }
     };
 
-    fetchInfo();
-  }, [id, role]);
-
-  useEffect(() => {
-    const fetchRecentLogin = async () => {
-      if (info) {
-        try {
-          const response = await fetch(
-            `http://localhost:6969/recent-log/${info.username}`
-          );
-          if (response.ok) {
-            const data = await response.json();
-            setRecentLogin(data);
-          } else {
-            console.error("Failed to fetch recent login");
-          }
-        } catch (error) {
-          console.error("Error fetching recent login:", error);
+    const fetchRecentLogin = async (username) => {
+      try {
+        const response = await fetch(
+          `http://localhost:6969/recent-log/${username}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setRecentLogin(data);
+        } else {
+          console.error("Failed to fetch recent login");
         }
+      } catch (error) {
+        console.error("Error fetching recent login:", error);
       }
     };
 
-    fetchRecentLogin();
-  }, [info]);
+    fetchInfo();
+  }, [id, role]);
 
   const formatDate = (dateString) => {
-    if (!dateString) return "N/A"; // Handle undefined date
+    if (!dateString) return "N/A";
 
     const date = new Date(dateString);
     const months = [
@@ -114,7 +109,7 @@ const AttendanceView = ({ id, role, onClose }) => {
                       <strong>Email :</strong> &nbsp;{info.email}
                     </p>
                     <p>
-                      <strong>Membership :</strong> &nbsp;{info.subscription}
+                      <strong>Membership :</strong> &nbsp;{info.subscription}{" "}
                       <span
                         className={`${
                           info.payment ? "make-green" : "make-red"

@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -805,8 +806,22 @@ app.post("/attendance-log", async (req, res) => {
     let action;
 
     if (recentLog && recentLog.action === "login") {
+      if (role === "trainer") {
+        await Trainer.findOneAndUpdate(
+          { username },
+          { status: "InActive" },
+          { new: true }
+        );
+      }
       action = "logout";
     } else {
+      if (role === "trainer") {
+        await Trainer.findOneAndUpdate(
+          { username },
+          { status: "Active" },
+          { new: true }
+        );
+      }
       action = "login";
     }
 

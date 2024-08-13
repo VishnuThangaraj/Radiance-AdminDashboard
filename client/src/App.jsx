@@ -13,13 +13,16 @@ import { SnackbarProvider } from "notistack";
 import "./App.scss";
 
 // Lazy load components
+const AdminDashboard = lazy(() =>
+  import("./components/Dashboard/AdminDashboard")
+);
+const Attendance = lazy(() => import("./components/Attendance/Attendance"));
+const Calendar = lazy(() => import("./components/Calendar/Calendar"));
 const Login = lazy(() => import("./components/Login/Login"));
 const Members = lazy(() => import("./components/Members/Members"));
-const Trainers = lazy(() => import("./components/Trainers/Trainers"));
 const Membership = lazy(() => import("./components/Membership/Membership"));
 const Payment = lazy(() => import("./components/Payment/Payment"));
-const Calendar = lazy(() => import("./components/Calendar/Calendar"));
-const Attendance = lazy(() => import("./components/Attendance/Attendance"));
+const Trainers = lazy(() => import("./components/Trainers/Trainers"));
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -76,6 +79,7 @@ const App = () => {
                   <>
                     <Navbar userDtls={user} />
                     <Sidebar userRole={user.role} />
+                    <AdminDashboard />
                   </>
                 ) : (
                   <Navigate to="/login" />

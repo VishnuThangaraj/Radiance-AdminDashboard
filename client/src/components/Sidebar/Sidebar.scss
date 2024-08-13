@@ -42,6 +42,7 @@
 }
 
 .sidebar-content {
+  border-inline-start: 4px solid transparent;
   font-size: 15px;
 }
 
@@ -59,10 +60,10 @@
 }
 
 .icon-container {
-  width: 25px;
-  height: 25px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background-color: #2a2e3a;
+  background-color: #3c3d44b2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -78,6 +79,16 @@
   position: fixed;
   bottom: 10px;
   left: 50px;
+}
+.sidebar-content:hover {
+  background-color: #191c25ef;
+  border-top-right-radius: 150px;
+  border-bottom-right-radius: 150px;
+  margin-inline-end: 10px;
+
+  .menu-label {
+    color: white;
+  }
 }
 .nav-active {
   background-color: #191c25ef;

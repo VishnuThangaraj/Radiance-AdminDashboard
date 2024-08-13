@@ -9,6 +9,7 @@ const Attendance = () => {
   const [memberId, setMemberId] = useState("");
   const [trainerId, setTrainerId] = useState("");
   const [recentLogin, setRecentLogin] = useState(null);
+  const [viewKey, setViewKey] = useState(0); // Added state for forcing re-render
   const { enqueueSnackbar } = useSnackbar();
 
   const showNotification = (message, type) => {
@@ -78,6 +79,7 @@ const Attendance = () => {
             action: "login",
             timestamp: new Date().toISOString(),
           });
+          setViewKey((prevKey) => prevKey + 1); // Force re-render by updating key
         } else {
           showNotification("Failed to create log entry", "error");
         }
@@ -117,6 +119,7 @@ const Attendance = () => {
 
       <div className="card-container" data-aos="fade-up" data-aos-delay="200">
         <AttendanceView
+          key={viewKey} // Pass the key to force re-render
           id={role === "member" ? memberId : trainerId}
           role={role}
           recentLogin={recentLogin}

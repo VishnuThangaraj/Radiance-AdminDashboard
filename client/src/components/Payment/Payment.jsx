@@ -325,7 +325,7 @@ function Payment() {
                           className="btn btn-success px-3"
                           onClick={() => handleGenerateReceiptClick(pay)} // Pass data here
                         >
-                          <Icon path={mdiFileDocumentOutline} size={1} /> View
+                          <Icon path={mdiFileDocumentOutline} size={1} /> Print
                         </div>
                       ) : (
                         <div

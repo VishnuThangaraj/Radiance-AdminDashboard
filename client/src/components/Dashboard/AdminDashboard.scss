@@ -1,0 +1,21 @@
+.top-widgets-hold {
+  margin-top: 15px;
+  justify-content: space-between;
+}
+
+.dash-widget {
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+  width: 250px;
+  height: 90px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.wid-logo {
+  background-color: red;
+  margin-inline-end: 10px;
+  width: 70px;
+}

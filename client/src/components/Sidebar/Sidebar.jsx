@@ -71,13 +71,20 @@ const Sidebar = ({ userRole }) => {
     },
   ];
 
-  const userSidebar = [
+  const trainerSidebar = [
     {
       key: `sidebar-u1`,
       label: "Dashboard",
       value: "home",
       icon: mdiSpeedometer,
       color: "#8f60e5",
+    },
+    {
+      key: `sidebar-u2`,
+      label: "Members",
+      value: "member",
+      icon: mdiAccountMultiple,
+      color: "#ffab06",
     },
     {
       key: `sidebar-u4`,
@@ -121,7 +128,7 @@ const Sidebar = ({ userRole }) => {
           className="role_area fa-fade"
           style={{ "--fa-animation-duration": "2s" }}
         >
-          {userRole === "admin" ? "Admin Dashboard" : "Employee Dashboard"}
+          {userRole === "admin" ? "Admin Dashboard" : "Trainer Dashboard"}
         </div>
       </div>
       <div className="sidebar_navigation">Navigation</div>
@@ -141,7 +148,7 @@ const Sidebar = ({ userRole }) => {
                 <span className="menu-label">{menu.label}</span>
               </div>
             ))
-          : userSidebar.map((menu) => (
+          : trainerSidebar.map((menu) => (
               <div
                 key={menu.key}
                 className="sidebar-content"
