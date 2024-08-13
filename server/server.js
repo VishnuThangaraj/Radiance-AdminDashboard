@@ -5,6 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const nodemailer = require("nodemailer");
+const Admin = require("./models/Admin");
 const Attendance = require("./models/Attendance");
 const Calendar = require("./models/Calendar");
 const Member = require("./models/Member");
@@ -65,7 +66,7 @@ app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    let user = await Member.findOne({ username });
+    let user = await Admin.findOne({ username });
     if (user) {
       const isMatch = await bcrypt.compare(password, user.password);
       if (isMatch) {
@@ -76,7 +77,7 @@ app.post("/login", async (req, res) => {
           name: user.name,
         };
         return res.json({
-          message: "Logged in as Member",
+          message: "Logged in as Admin",
           user: req.session.user,
         });
       } else {
