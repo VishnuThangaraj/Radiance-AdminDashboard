@@ -1,0 +1,103 @@
+.attendance-card {
+  background: #fff;
+  padding: 20px;
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 2% / 6%;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.attendance-view-container {
+  display: flex;
+  gap: 20px;
+  justify-content: space-evenly;
+  height: 330px;
+  padding-top: 10px;
+}
+
+.recent-login-card {
+  width: 300px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0 10px;
+  border-radius: 20%/55%;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  transform: scaleX(1.05);
+}
+
+.view-member-trainer-content {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  height: 400px;
+  border-radius: 20%;
+}
+
+.profile-details {
+  flex: 1;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.profile-details p {
+  margin: 10px 0;
+  font-size: 1rem;
+  color: #555;
+}
+
+.profile-details strong {
+  color: #333;
+}
+
+/* Profile image container */
+.profile-image {
+  flex: 0 0 200px;
+}
+
+.profile-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.view-member-trainer-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 90%;
+  max-width: 620px;
+  height: 320px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.recent-login-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+}
+
+.overlay-text-attendance {
+  text-align: center;
+  padding-top: 12%;
+  font-size: 18px;
+  text-transform: capitalize;
+}

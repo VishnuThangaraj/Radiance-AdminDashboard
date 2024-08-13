@@ -159,7 +159,7 @@ function Membership() {
       <div className="hello py-3" data-aos="zoom-out-up">
         Comprehensive Membership List
       </div>
-      <div className="form-container">
+      <div className="form-containers">
         {editingPlanId ? (
           <div className=" my-2 mb-4 edit-membership-form">
             <input

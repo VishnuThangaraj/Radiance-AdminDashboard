@@ -21,7 +21,7 @@
   max-height: 350px;
   overflow: hidden;
   border: 1px solid #ddd;
-  border-radius: 2%/4%;
+  border-radius: 2%/6%;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -47,11 +47,11 @@
 }
 
 .confirmation-queue {
-  background-color: #f8d7da; /* Optional: highlight the row to indicate it's in deletion queue */
+  background-color: #f8d7da;
 }
 
 .fade-slide-remove {
   opacity: 0;
   transform: translateY(-20px);
-  pointer-events: none; /* Optional: prevent interactions with the fading row */
+  pointer-events: none;
 }

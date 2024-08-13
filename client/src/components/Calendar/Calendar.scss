@@ -125,12 +125,12 @@
 //   color: white;
 //   border-radius: 5px;
 //   padding: 2px 4px; /* Reduced padding */
-//   font-size: 0.75rem; 
+//   font-size: 0.75rem;
 //   text-align: center;
 //   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-//   overflow: hidden; 
-//   white-space: nowrap; 
-//   text-overflow: ellipsis; 
+//   overflow: hidden;
+//   white-space: nowrap;
+//   text-overflow: ellipsis;
 // }
 .custom-day {
   display: flex;
@@ -166,4 +166,30 @@
   padding-inline-start: 5px;
   border-radius: 28%/90%;
   margin-bottom: 1px;
+}
+
+.custom-date-cell {
+  position: relative;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+
+.buttons-container .btn {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.75rem;
+}
+
+.rbc-date-cell {
+  position: relative;
+  z-index: 1;
+  // text-align: center;
+  font-size: 20px;
+}
+
+.btn-sm {
+  z-index: 99;
 }

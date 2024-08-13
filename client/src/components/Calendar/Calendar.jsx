@@ -2,43 +2,54 @@ import React, { useState, useEffect } from "react";
 import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import Icon from "@mdi/react";
-import {
-  mdiCalendarStarFourPoints,
-  mdiYoga,
-  mdiAccountGroup,
-  mdiCalendarMonth,
-} from "@mdi/js";
+import { mdiCalendarStarFourPoints, mdiCalendarCheck } from "@mdi/js";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import AddEvents from "../Forms/Calendar/AddEvents";
+import EventList from "./EventList/EventList";
 import "./Calendar.scss";
 
 const localizer = momentLocalizer(moment);
 
 const Calendar = () => {
   const [loading, setLoading] = useState(true);
-  const [eventCounts, setEventCounts] = useState({});
+  const [events, setEvents] = useState([]);
   const [addEvent, setAddEvent] = useState(false);
+  const [selectedEvents, setSelectedEvents] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:6969/get-calendar");
+        const response = await fetch(
+          "http://localhost:6969/get-calendar-attendance"
+        );
         const data = await response.json();
 
-        const counts = data.calendars.reduce((acc, event) => {
-          const date = new Date(event.date).toDateString();
+        // Group events by date
+        const groupedEvents = data.calendars.reduce((acc, event) => {
+          const date = moment(event.date).startOf("day").format("YYYY-MM-DD");
           if (!acc[date]) {
-            acc[date] = { trainers: 0, members: 0 };
+            acc[date] = [];
           }
-          if (event.role === "trainer") {
-            acc[date].trainers += 1;
-          } else if (event.role === "member") {
-            acc[date].members += 1;
-          }
+          acc[date].push(event);
           return acc;
         }, {});
 
-        setEventCounts(counts);
+        // Prepare events for the calendar
+        const calendarEvents = Object.keys(groupedEvents).map((date) => {
+          const dayEvents = groupedEvents[date];
+          return {
+            id: dayEvents[0]._id,
+            title: `${dayEvents.length} Event${
+              dayEvents.length > 1 ? "s" : ""
+            }`,
+            start: new Date(date),
+            end: new Date(date),
+            allDay: true,
+            events: dayEvents,
+          };
+        });
+
+        setEvents(calendarEvents);
       } catch (error) {
         console.error("Error fetching events:", error);
       } finally {
@@ -57,21 +68,20 @@ const Calendar = () => {
     setAddEvent(false);
   };
 
-  const CustomDay = ({ date }) => {
-    if (!date) return null;
+  const showEventList = (dayEvents) => {
+    setSelectedEvents(dayEvents);
+  };
 
-    const dayDate = date.toDateString();
-    const counts = eventCounts[dayDate] || { trainers: 0, members: 0 };
+  const hideEventList = () => {
+    setSelectedEvents(null);
+  };
 
-    return (
-      <div className="custom-day">
-        <div className="day-info text-left" style={{ cursor: "pointer" }}>
-          <div className="evnt-pill">Events : {counts.trainers}</div>
-          <div className="trainer-pill">Trainer : {counts.trainers}</div>
-          <div className="member-pill">Members : {counts.members}</div>
-        </div>
-      </div>
-    );
+  const eventStyleGetter = (event) => {
+    return {
+      style: {
+        backgroundColor: event.events.length > 1 ? "#ff7f50" : "#1e90ff",
+      },
+    };
   };
 
   return (
@@ -99,25 +109,60 @@ const Calendar = () => {
           ) : (
             <BigCalendar
               localizer={localizer}
-              events={[]}
               startAccessor="start"
               endAccessor="end"
+              eventPropGetter={eventStyleGetter}
               components={{
-                dateCellWrapper: ({ children, value }) => (
-                  <div className="rbc-date-cell">
-                    <CustomDay date={value} />
-                    {children}
-                  </div>
-                ),
+                dateCellWrapper: ({ children, value }) => {
+                  const dateStr = moment(value).format("YYYY-MM-DD");
+                  const dayEvents = events.find(
+                    (event) =>
+                      moment(event.start).format("YYYY-MM-DD") === dateStr
+                  );
+
+                  return (
+                    <div
+                      className="rbc-date-cell custom-date-cell"
+                      style={{ marginTop: "38px" }}
+                    >
+                      <div className="buttons-container">
+                        {dayEvents && (
+                          <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() => showEventList(dayEvents.events)}
+                          >
+                            <Icon path={mdiCalendarCheck} size={0.6} />{" "}
+                            {dayEvents.events.length}
+                          </button>
+                        )}
+                        <div className="btn btn-secondary">T : 0 | m : 0</div>
+                      </div>
+                      {children}
+                    </div>
+                  );
+                },
+                agenda: {
+                  event: ({ event }) => (
+                    <div>
+                      {event.events.map((e) => (
+                        <div key={e._id}>{e.name}</div>
+                      ))}
+                    </div>
+                  ),
+                },
               }}
               className="m-3"
               style={{ height: 520, width: 1000 }}
               selectable
+              views={["month", "agenda"]}
             />
           )}
         </div>
       </div>
       {addEvent && <AddEvents onClose={hideAddEvent} />}
+      {selectedEvents && (
+        <EventList events={selectedEvents} onClose={hideEventList} />
+      )}
     </div>
   );
 };

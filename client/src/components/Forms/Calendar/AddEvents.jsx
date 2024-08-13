@@ -99,7 +99,6 @@ function AddEvents({ onClose }) {
               style={{ padding: "12px 10px" }}
             >
               <option value="Private">Private</option>
-              <option value="Trainers">Trainers</option>
               <option value="Public">Public</option>
             </select>
           </div>

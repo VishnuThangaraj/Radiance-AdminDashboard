@@ -1,0 +1,20 @@
+.member-table-holder {
+  margin-top: 20px;
+  padding: 20px;
+  min-height: 450px;
+  max-height: 450px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  border-radius: 2%/4%;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+#add_trainer_btn {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+#add_trainer_btn:hover {
+  background-color: #45a049;
+}

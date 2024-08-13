@@ -9,6 +9,7 @@ import {
   mdiLogout,
   mdiCreditCardOutline,
   mdiCrown,
+  mdiChartBoxMultipleOutline,
 } from "@mdi/js";
 import "./Sidebar.scss";
 
@@ -27,34 +28,42 @@ const Sidebar = ({ userRole }) => {
     },
     {
       key: `sidebar-2`,
+      label: "Attendance",
+      value: "attendance",
+      icon: mdiChartBoxMultipleOutline,
+      color: "#0e85d6",
+    },
+    {
+      key: `sidebar-3`,
       label: "Members",
       value: "member",
       icon: mdiAccountMultiple,
       color: "#ffab06",
     },
     {
-      key: `sidebar-3`,
+      key: `sidebar-4`,
       label: "Trainers",
       value: "trainer",
       icon: mdiYoga,
       color: "#ac2c36",
     },
     {
-      key: `sidebar-4`,
+      key: `sidebar-5`,
       label: "Payment",
       value: "payment",
       icon: mdiCreditCardOutline,
       color: "#18be5a",
     },
     {
-      key: `sidebar-5`,
+      key: `sidebar-6`,
       label: "Membership",
       value: "membership",
       icon: mdiCrown,
       color: "#ffab15",
     },
+
     {
-      key: `sidebar-6`,
+      key: `sidebar-7`,
       label: "Calendar",
       value: "calendar",
       icon: mdiCalendarMonth,

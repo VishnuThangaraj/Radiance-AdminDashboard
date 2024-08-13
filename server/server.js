@@ -606,6 +606,28 @@ app.get("/get-payments", async (req, res) => {
   }
 });
 
+// Fetch Attendance with Username
+app.get("/recent-log/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const recentLog = await Attendance.findOne({ username: id })
+      .sort({ timestamp: -1 })
+      .exec();
+
+    if (!recentLog) {
+      return res
+        .status(404)
+        .json({ message: "No recent login found for this ID" });
+    }
+
+    res.json(recentLog);
+  } catch (error) {
+    console.error("Error fetching recent login:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // Fetch Trainer by ID
 app.get("/trainer-data/:id", async (req, res) => {
   const trainerId = req.params.id;
@@ -729,6 +751,72 @@ app.get("/get-members/:membershipId", async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ message: "Error fetching members", error });
+  }
+});
+
+// check ID (Trainer, Member or Invalid)
+app.post("/check-id", async (req, res) => {
+  try {
+    const { username } = req.body;
+
+    if (!username) {
+      return res.status(400).json({ error: "Username is required" });
+    }
+
+    const member = await Member.findOne({ username });
+    if (member) {
+      return res.status(200).json({ id: member._id, role: "member" });
+    }
+
+    const trainer = await Trainer.findOne({ username });
+    if (trainer) {
+      return res.status(200).json({ id: trainer._id, role: "trainer" });
+    }
+
+    res.status(200).json({ role: "invalid" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Log an action (login/logout)
+app.post("/attendance-log", async (req, res) => {
+  try {
+    const { username, role } = req.body;
+
+    if (!role) {
+      return res.status(400).json({ error: "Role is required" });
+    }
+
+    if (!["trainer", "member"].includes(role)) {
+      return res.status(400).json({ error: "Invalid role" });
+    }
+
+    const now = new Date();
+    const startOfDay = new Date(now.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(now.setHours(23, 59, 59, 999));
+
+    const recentLog = await Attendance.findOne({
+      username,
+      timestamp: { $gte: startOfDay, $lte: endOfDay },
+    }).sort({ timestamp: -1 });
+
+    let action;
+
+    if (recentLog && recentLog.action === "login") {
+      action = "logout";
+    } else {
+      action = "login";
+    }
+
+    const logEntry = new Attendance({ username, role, action });
+    await logEntry.save();
+
+    res
+      .status(201)
+      .json({ message: `Log entry created with action: ${action}`, logEntry });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

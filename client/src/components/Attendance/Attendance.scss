@@ -1,51 +1,41 @@
-/* Attendance.css */
-body,
-html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-}
-
 .attendance-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
   width: 100vw;
-  background-image: url("your-background-image-url.jpg");
   background-size: cover;
   background-position: center;
 }
 
-.form-container {
+.attendance-form-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 20px;
-  border-radius: 8px;
+  background: white;
+  padding: 25px 15%;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-.input-box {
-  padding: 10px;
+.attendance-input-box {
+  padding: 10px 20px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-bottom: 10px;
   width: 100%;
-  max-width: 300px;
+  border-radius: 4%/50%;
+  max-width: 800px;
+  margin-inline-end: 5%;
 }
 
-.submit-button {
-  padding: 10px 20px;
+.attendance-submit-button {
+  padding: 10px 30px;
   border: none;
-  border-radius: 4px;
-  background-color: #007bff;
+  border-radius: 25%/60%;
+  background-color: #00cf3e;
   color: white;
   cursor: pointer;
   font-size: 16px;
 }
 
-.submit-button:hover {
-  background-color: #0056b3;
+.attendance-submit-button:hover {
+  transform: scaleX(1.04);
+  background-color: #00a531;
 }

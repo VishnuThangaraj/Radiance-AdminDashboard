@@ -146,7 +146,7 @@ const Trainers = () => {
             <Icon path={mdiPrinterOutline} size={1} /> Export
           </div>
           <div
-            id="add_mbr_btn"
+            id="add_trainer_btn"
             className="btn utl-btn"
             onClick={() => setShowForm(true)}
             data-aos="zoom-in"

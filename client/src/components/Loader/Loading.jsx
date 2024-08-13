@@ -6,8 +6,8 @@ const Loading = () => {
   return (
     <div className="loading-container">
       <div className="loading-content">
-        <img src={Logo} alt="Loading" className="loading-image fa-bounce" />
-        <div className="loading-text text-light">Loading...</div>
+        <img src="images/loader.png" alt="Loading" className="loading-image" />
+        <div className="loading-text ">Loading...</div>
       </div>
     </div>
   );
