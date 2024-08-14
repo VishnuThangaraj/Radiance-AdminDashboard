@@ -199,7 +199,13 @@ const AttendanceView = ({ id, role, onClose }) => {
             </p>
             <p>
               <strong>Action:</strong>{" "}
-              {recentLogin.action === "login" ? "Login" : "Logout"}
+              <span
+                className={`${
+                  recentLogin.action === "login" ? "make-green" : "make-red"
+                }`}
+              >
+                {recentLogin.action === "login" ? "LOGIN" : "LOGOUT"}
+              </span>
             </p>
             <p>
               <strong>Date:</strong> {formatDate(recentLogin.timestamp)}

@@ -6,6 +6,7 @@ import { mdiCalendarStarFourPoints, mdiCalendarCheck } from "@mdi/js";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import AddEvents from "../Forms/Calendar/AddEvents";
 import EventList from "./EventList/EventList";
+import AttendanceList from "./AttendanceList/AttendanceList";
 import "./Calendar.scss";
 
 const localizer = momentLocalizer(moment);
@@ -13,18 +14,27 @@ const localizer = momentLocalizer(moment);
 const Calendar = () => {
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);
+  const [counts, setCounts] = useState({});
   const [addEvent, setAddEvent] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState(null);
+  const [selectedAttendance, setSelectedAttendance] = useState(null);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchEventsAndCounts = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:6969/get-calendar-attendance"
-        );
+        const startOfMonth = moment().startOf("month");
+        const endOfMonth = moment().endOf("month");
+
+        const datesInMonth = [];
+        let currentDate = startOfMonth.clone();
+        while (currentDate <= endOfMonth) {
+          datesInMonth.push(currentDate.format("YYYY-MM-DD"));
+          currentDate.add(1, "day");
+        }
+
+        const response = await fetch("http://localhost:6969/get-calendar");
         const data = await response.json();
 
-        // Group events by date
         const groupedEvents = data.calendars.reduce((acc, event) => {
           const date = moment(event.date).startOf("day").format("YYYY-MM-DD");
           if (!acc[date]) {
@@ -34,7 +44,6 @@ const Calendar = () => {
           return acc;
         }, {});
 
-        // Prepare events for the calendar
         const calendarEvents = Object.keys(groupedEvents).map((date) => {
           const dayEvents = groupedEvents[date];
           return {
@@ -50,14 +59,30 @@ const Calendar = () => {
         });
 
         setEvents(calendarEvents);
+
+        const countsData = {};
+        await Promise.all(
+          datesInMonth.map(async (date) => {
+            const countsResponse = await fetch(
+              `http://localhost:6969/fetch-attendance/${date}`
+            );
+            const attendanceCount = await countsResponse.json();
+            countsData[date] = {
+              trainerCount: attendanceCount.trainerCount || 0,
+              memberCount: attendanceCount.memberCount || 0,
+            };
+          })
+        );
+
+        setCounts(countsData);
       } catch (error) {
-        console.error("Error fetching events:", error);
+        console.error("Error fetching events or counts:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEvents();
+    fetchEventsAndCounts();
   }, []);
 
   const handleAddEvent = () => {
@@ -74,6 +99,22 @@ const Calendar = () => {
 
   const hideEventList = () => {
     setSelectedEvents(null);
+  };
+
+  const showAttendanceList = async (dateStr) => {
+    try {
+      const response = await fetch(
+        `http://localhost:6969/fetch-attendance-list/${dateStr}`
+      );
+      const attendanceData = await response.json();
+      setSelectedAttendance(attendanceData.attendance || []);
+    } catch (error) {
+      console.error("Error fetching attendance data:", error);
+    }
+  };
+
+  const hideAttendanceList = () => {
+    setSelectedAttendance(null);
   };
 
   const eventStyleGetter = (event) => {
@@ -119,6 +160,8 @@ const Calendar = () => {
                     (event) =>
                       moment(event.start).format("YYYY-MM-DD") === dateStr
                   );
+                  const trainerCount = counts[dateStr]?.trainerCount || 0;
+                  const memberCount = counts[dateStr]?.memberCount || 0;
 
                   return (
                     <div
@@ -135,7 +178,13 @@ const Calendar = () => {
                             {dayEvents.events.length}
                           </button>
                         )}
-                        <div className="btn btn-secondary">T : 0 | m : 0</div>
+                        <div
+                          id="trainer_count"
+                          className="btn btn-secondary"
+                          onClick={() => showAttendanceList(dateStr)}
+                        >
+                          T: {trainerCount} | M: {memberCount}
+                        </div>
                       </div>
                       {children}
                     </div>
@@ -162,6 +211,12 @@ const Calendar = () => {
       {addEvent && <AddEvents onClose={hideAddEvent} />}
       {selectedEvents && (
         <EventList events={selectedEvents} onClose={hideEventList} />
+      )}
+      {selectedAttendance && (
+        <AttendanceList
+          attendance={selectedAttendance}
+          onClose={hideAttendanceList}
+        />
       )}
     </div>
   );

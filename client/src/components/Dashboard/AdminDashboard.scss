@@ -15,7 +15,43 @@
 }
 
 .wid-logo {
-  background-color: red;
   margin-inline-end: 10px;
   width: 70px;
+}
+.bottom-widgets-hold {
+  width: 100%;
+  height: 62%;
+  margin-top: 3%;
+  justify-content: space-between;
+}
+.cash-widget {
+  position: inherit;
+  width: 300px;
+  height: 187px;
+  border-radius: 5%/7%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+.dash-transcation {
+  height: 100%;
+  width: 740px;
+  border-radius: 3%/4%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.bottom-widgets-hold {
+  width: 100%;
+  height: 62%;
+  margin-top: 3%;
+  justify-content: space-between;
+}
+
+.dash-transcation {
+  height: 100%;
+  width: 740px;
+  border-radius: 3%/4%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  overflow: hidden;
 }

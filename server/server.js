@@ -648,6 +648,68 @@ app.get("/trainer-data/:id", async (req, res) => {
   }
 });
 
+// Fetch Member by Username
+app.get("/member-name/:username", async (req, res) => {
+  const username = req.params.username;
+
+  try {
+    // Find trainer by username
+    const member = await Member.findOne({ username });
+
+    if (!member) {
+      return res.status(404).json({ message: "Member not found" });
+    }
+
+    // Send member name
+    res.json({ name: member.name });
+  } catch (error) {
+    console.error("Error fetching Member Name:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Fetch Trainer by Username
+app.get("/trainer-name/:username", async (req, res) => {
+  const username = req.params.username;
+
+  try {
+    const trainer = await Trainer.findOne({ username });
+
+    if (!trainer) {
+      return res.status(404).json({ message: "Trainer not found" });
+    }
+
+    // Send trainer name
+    res.json({ name: trainer.name });
+  } catch (error) {
+    console.error("Error fetching Trainer Name:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Fetch Dashboard Counts
+app.get("/dashboard-count", async (req, res) => {
+  try {
+    // Count of trainers
+    const totalTrainers = await Trainer.countDocuments({});
+
+    // Count of members
+    const totalMembers = await Member.countDocuments({});
+
+    // Count of trainers with active status
+    const activeTrainers = await Trainer.countDocuments({ status: "Active" });
+
+    res.json({
+      totalTrainers,
+      totalMembers,
+      activeTrainers,
+    });
+  } catch (error) {
+    console.error("Error fetching counts:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 // Fetch Member by ID
 app.get("/member-data/:id", async (req, res) => {
   const memberId = req.params.id;
@@ -753,6 +815,103 @@ app.get("/get-members/:membershipId", async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ message: "Error fetching members", error });
+  }
+});
+
+// Fetch Attendance By Date
+app.get("/fetch-attendance/:date", async (req, res) => {
+  try {
+    const date = req.params.date;
+    const startOfDay = moment(date).startOf("day").toDate();
+    const endOfDay = moment(date).endOf("day").toDate();
+
+    // Fetch unique attendance count for trainers
+    const trainerCount = await Attendance.aggregate([
+      {
+        $match: {
+          role: "trainer",
+          timestamp: {
+            $gte: startOfDay,
+            $lt: endOfDay,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$username",
+        },
+      },
+      {
+        $count: "uniqueTrainers",
+      },
+    ]);
+
+    // Fetch unique attendance count for members
+    const memberCount = await Attendance.aggregate([
+      {
+        $match: {
+          role: "member",
+          timestamp: {
+            $gte: startOfDay,
+            $lt: endOfDay,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$username",
+        },
+      },
+      {
+        $count: "uniqueMembers",
+      },
+    ]);
+
+    res.json({
+      trainerCount: trainerCount[0]?.uniqueTrainers || 0,
+      memberCount: memberCount[0]?.uniqueMembers || 0,
+    });
+  } catch (error) {
+    console.error("Error fetching unique attendance counts:", error);
+    res.status(500).json({
+      error: "An error occurred while fetching the attendance counts",
+    });
+  }
+});
+
+// Fetch Attendance List By Date
+app.get("/fetch-attendance-list/:date", async (req, res) => {
+  try {
+    const date = req.params.date;
+    const startOfDay = moment(date).startOf("day").toDate();
+    const endOfDay = moment(date).endOf("day").toDate();
+
+    const attendanceRecords = await Attendance.aggregate([
+      {
+        $match: {
+          timestamp: {
+            $gte: startOfDay,
+            $lt: endOfDay,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$username",
+          username: { $first: "$username" },
+          role: { $first: "$role" },
+          action: { $first: "$action" },
+          timestamp: { $first: "$timestamp" },
+        },
+      },
+    ]);
+
+    res.json({ attendance: attendanceRecords });
+  } catch (error) {
+    console.error("Error fetching attendance records:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching attendance records" });
   }
 });
 

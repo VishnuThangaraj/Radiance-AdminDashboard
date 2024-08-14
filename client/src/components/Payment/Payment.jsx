@@ -323,7 +323,7 @@ function Payment() {
                       {pay.subscription_details.payment_status ? (
                         <div
                           className="btn btn-success px-3"
-                          onClick={() => handleGenerateReceiptClick(pay)} // Pass data here
+                          onClick={() => handleGenerateReceiptClick(pay)}
                         >
                           <Icon path={mdiFileDocumentOutline} size={1} /> Print
                         </div>

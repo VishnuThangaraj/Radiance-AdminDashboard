@@ -11,6 +11,7 @@
   border-top-right-radius: 2%;
   border-bottom-right-radius: 2%;
   box-shadow: 2px 4px 4px grey;
+  z-index: 999;
 }
 
 .sidebar_logo_holder {
@@ -57,6 +58,9 @@
   align-items: center;
   padding: 10px;
   cursor: pointer;
+  border-top-right-radius: 150px;
+  border-bottom-right-radius: 150px;
+  margin-inline-end: 10px;
 }
 
 .icon-container {
@@ -82,9 +86,6 @@
 }
 .sidebar-content:hover {
   background-color: #191c25ef;
-  border-top-right-radius: 150px;
-  border-bottom-right-radius: 150px;
-  margin-inline-end: 10px;
 
   .menu-label {
     color: white;
@@ -93,9 +94,6 @@
 .nav-active {
   background-color: #191c25ef;
   border-inline-start: 4px solid blue;
-  border-top-right-radius: 150px;
-  border-bottom-right-radius: 150px;
-  margin-inline-end: 10px;
 
   .menu-label {
     color: white;

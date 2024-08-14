@@ -134,14 +134,20 @@ const Sidebar = ({ userRole }) => {
       <div className="sidebar_navigation">Navigation</div>
       <div className="sidebar_menu">
         {userRole === "admin"
-          ? adminSidebar.map((menu) => (
+          ? adminSidebar.map((menu, index) => (
               <div
                 key={menu.key}
                 className={`sidebar-content ${
                   currentPath === menu.value ? "nav-active" : ""
                 }`}
                 onClick={() => handleItemClick(menu.value)}
+                data-aos="fade-right"
+                data-aos-anchor="#example-anchor"
+                data-aos-offset="200"
+                data-aos-duration="300"
+                data-aos-delay={300 + 50 * index}
               >
+                {console.log(index)}
                 <div className="icon-container">
                   <Icon path={menu.icon} size={0.7} color={menu.color} />
                 </div>
