@@ -31,6 +31,7 @@
   border-radius: 5%/7%;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   background-color: white;
+  padding-inline: 30px;
 }
 .dash-transcation {
   height: 100%;
@@ -54,4 +55,32 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   background-color: white;
   overflow: hidden;
+}
+#transcation_tr th {
+  color: #98a5b0;
+  font-size: 12px;
+}
+.badge {
+  background-color: #31ce35;
+  box-shadow: 0 4px 3px rgba(0, 0, 0, 0.1);
+}
+.btn-round {
+  background-color: #31ce35;
+  width: 28px;
+  height: 28px;
+  cursor: auto;
+}
+
+.wid-title-revenue,
+.wid-title-balance {
+  text-align: center;
+  padding-top: 40px;
+  font-weight: 600;
+  font-size: 25px;
+  letter-spacing: 1px;
+}
+.wid-price {
+  font-size: 27px;
+  text-shadow: 2px 2px 2px rgba(128, 128, 128, 0.26);
+  text-align: center;
 }

@@ -915,6 +915,52 @@ app.get("/fetch-attendance-list/:date", async (req, res) => {
   }
 });
 
+// Fetch Paid and Due Amount
+app.get("/get-transactions-due", async (req, res) => {
+  try {
+    const totalPayment = await Transaction.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$payment" },
+        },
+      },
+    ]);
+
+    const totalCost = await Subscription.aggregate([
+      {
+        $lookup: {
+          from: "memberships",
+          localField: "membership_id",
+          foreignField: "_id",
+          as: "membershipDetails",
+        },
+      },
+      {
+        $unwind: "$membershipDetails",
+      },
+      {
+        $group: {
+          _id: null,
+          totalCost: { $sum: "$membershipDetails.price" },
+        },
+      },
+    ]);
+
+    // Check if there are any transactions and respond accordingly
+    if (totalPayment.length > 0) {
+      res.json({
+        totalPayment: totalPayment[0].total,
+        totalCost: totalCost[0].totalCost,
+      });
+    } else {
+      res.json({ totalPayment: 0, totalCost: 0 });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error calculating total payment", error });
+  }
+});
+
 // check ID (Trainer, Member or Invalid)
 app.post("/check-id", async (req, res) => {
   try {
