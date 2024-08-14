@@ -215,7 +215,7 @@ const AdminDashboard = () => {
                 {payments.totalPayment}
               </div>
               <div className="sdf" data-aos="fade-down" data-aos-delay="300">
-                <img src="images/profit.png" />
+                <img src="images/cash.png" />
               </div>
             </div>
           </div>
