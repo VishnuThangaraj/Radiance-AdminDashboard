@@ -545,7 +545,7 @@ app.get("/get-membership", async (req, res) => {
 // Fetch Transaction
 app.get("/get-transactions", async (req, res) => {
   try {
-    const transactions = await Transaction.find();
+    const transactions = await Transaction.find().sort({ date: -1 });
     if (transactions.length > 0) res.status(200).json(transactions);
     else res.status(201).json(transactions);
   } catch (err) {
@@ -583,6 +583,23 @@ app.get("/get-payments", async (req, res) => {
       },
       {
         $unwind: "$membership_details",
+      },
+      {
+        $addFields: {
+          payment_status_number: {
+            $cond: {
+              if: { $eq: ["$subscription_details.payment_status", true] },
+              then: 1,
+              else: 0,
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          payment_status_number: -1,
+          "subscription_details.start_date": 1,
+        },
       },
       {
         $project: {
