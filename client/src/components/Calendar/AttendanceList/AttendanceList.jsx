@@ -8,7 +8,6 @@ const AttendanceList = ({ attendance, onClose }) => {
   useEffect(() => {
     const fetchNames = async () => {
       try {
-        // Create an object to hold fetch promises
         const namePromises = attendance.map(async (att) => {
           const isMember = att.username.startsWith("RYC-MB");
           const endpoint = isMember
@@ -24,11 +23,10 @@ const AttendanceList = ({ attendance, onClose }) => {
             return { username: att.username, name: data.name };
           } catch (fetchError) {
             console.error(fetchError.message);
-            return { username: att.username, name: "Unknown" }; // Fallback name
+            return { username: att.username, name: "Unknown" };
           }
         });
 
-        // Resolve all promises and create a mapping of usernames to names
         const namesData = await Promise.all(namePromises);
         const namesMap = namesData.reduce((acc, { username, name }) => {
           acc[username] = name;
@@ -56,7 +54,6 @@ const AttendanceList = ({ attendance, onClose }) => {
     };
   }, [attendance, onClose]);
 
-  // Sort the attendance list: trainers first, then members
   const sortedAttendance = attendance.sort((a, b) => {
     if (a.role === "trainer" && b.role === "member") return -1;
     if (a.role === "member" && b.role === "trainer") return 1;

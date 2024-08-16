@@ -94,19 +94,11 @@ const App = () => {
               path="/member"
               element={
                 user ? (
-                  user.role === "admin" ? (
-                    <>
-                      <Navbar userDtls={user} />
-                      <Members />
-                      <Sidebar userRole={user.role} />
-                    </>
-                  ) : (
-                    <>
-                      <Navbar userDtls={user} />
-                      <Sidebar userRole={user.role} />
-                      <Members user={user} />
-                    </>
-                  )
+                  <>
+                    <Navbar userDtls={user} />
+                    <Sidebar userRole={user.role} />
+                    <Members user={user} />
+                  </>
                 ) : (
                   <Navigate to="/login" />
                 )
@@ -170,15 +162,11 @@ const App = () => {
               path="/calendar"
               element={
                 user ? (
-                  user.role === "admin" ? (
-                    <>
-                      <Navbar userDtls={user} />
-                      <Sidebar userRole={user.role} />
-                      <Calendar />
-                    </>
-                  ) : (
-                    <Navigate to="/home" />
-                  )
+                  <>
+                    <Navbar userDtls={user} />
+                    <Sidebar userRole={user.role} />
+                    <Calendar user={user} />
+                  </>
                 ) : (
                   <Navigate to="/login" />
                 )

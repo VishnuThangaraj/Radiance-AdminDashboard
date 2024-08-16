@@ -82,7 +82,7 @@ const Sidebar = ({ userRole }) => {
     {
       key: `sidebar-u4`,
       label: "Calendar",
-      value: "home",
+      value: "calendar",
       icon: mdiCalendarMonth,
       color: "#06cf5d",
     },

@@ -4,7 +4,7 @@ import Icon from "@mdi/react";
 import { mdiDelete, mdiArrowLeft } from "@mdi/js";
 import "./EventList.scss";
 
-const EventList = ({ events, onClose }) => {
+const EventList = ({ user, events, onClose }) => {
   const [eventToDelete, setEventToDelete] = useState(null);
   const eventListRef = useRef(null);
   const { enqueueSnackbar } = useSnackbar();
@@ -41,6 +41,10 @@ const EventList = ({ events, onClose }) => {
   };
 
   const handleDeleteConfirm = async () => {
+    if (user.role !== "admin") {
+      showNotification("Permission Denied: Unable to Remove Event", "warning");
+      return;
+    }
     try {
       const response = await fetch(
         `http://localhost:6969/del-calendar/${eventToDelete}`,

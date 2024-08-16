@@ -42,6 +42,7 @@ mongoose
   });
 
 // Middleware setup
+// CORS configuration
 app.use(
   cors({
     origin: "http://localhost:5174",
@@ -49,6 +50,8 @@ app.use(
     credentials: true,
   })
 );
+
+// Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -421,6 +424,16 @@ app.get("/get-trainers", async (req, res) => {
 app.get("/get-calendar", async (req, res) => {
   try {
     const calendars = await Calendar.find();
+    res.status(200).json({ calendars });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Fetch Calendar (Public Events)
+app.get("/get-calendar-public", async (req, res) => {
+  try {
+    const calendars = await Calendar.find({ access: "Public" });
     res.status(200).json({ calendars });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -937,6 +950,54 @@ app.get("/fetch-attendance/:date", async (req, res) => {
     res.status(500).json({
       error: "An error occurred while fetching the attendance counts",
     });
+  }
+});
+
+app.get("/attendance-trainer", async (req, res) => {
+  try {
+    const { username, date } = req.query;
+
+    if (!username || !date) {
+      return res
+        .status(400)
+        .json({ message: "Username and date are required." });
+    }
+
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const firstLogin = await Attendance.findOne({
+      username: username,
+      action: "login",
+      timestamp: { $gte: startOfDay, $lte: endOfDay },
+    }).sort({ timestamp: 1 });
+
+    let lastLogout = await Attendance.findOne({
+      username: username,
+      action: "logout",
+      timestamp: { $gte: startOfDay, $lte: endOfDay },
+    }).sort({ timestamp: -1 });
+
+    // If no logout found or if the logout is earlier than login, set logout time to 6 PM
+    if (
+      !lastLogout ||
+      (firstLogin && lastLogout.timestamp < firstLogin.timestamp)
+    ) {
+      lastLogout = {
+        username: username,
+        action: "logout",
+        timestamp: new Date(date),
+      };
+      lastLogout.timestamp.setHours(18, 0, 0, 0); // Set time to 6:00 PM
+    }
+
+    res.json({ firstLogin, lastLogout });
+  } catch (error) {
+    console.error("Error fetching attendance data:", error);
+    res.status(500).json({ message: "Internal server error." });
   }
 });
 
