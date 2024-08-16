@@ -76,11 +76,15 @@ const App = () => {
               path="/home"
               element={
                 user ? (
-                  <>
-                    <Navbar userDtls={user} />
-                    <Sidebar userRole={user.role} />
-                    <AdminDashboard />
-                  </>
+                  user.role === "admin" ? (
+                    <>
+                      <Navbar userDtls={user} />
+                      <Sidebar userRole={user.role} />
+                      <AdminDashboard />
+                    </>
+                  ) : (
+                    <Navigate to="/member" />
+                  )
                 ) : (
                   <Navigate to="/login" />
                 )
@@ -100,7 +104,7 @@ const App = () => {
                     <>
                       <Navbar userDtls={user} />
                       <Sidebar userRole={user.role} />
-                      {/* <MemberCalendar User_Data={user} /> */}
+                      <Members user={user} />
                     </>
                   )
                 ) : (

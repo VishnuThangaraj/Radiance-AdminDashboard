@@ -512,6 +512,50 @@ app.get("/get-members", async (req, res) => {
   }
 });
 
+app.get("/get-members/trainer/:id", async (req, res) => {
+  const trainer_id = new mongoose.Types.ObjectId(req.params.id);
+
+  try {
+    const members = await Member.aggregate([
+      { $match: { trainer_id: trainer_id } },
+      {
+        $lookup: {
+          from: "subscriptions",
+          localField: "_id",
+          foreignField: "member_id",
+          as: "subscriptions",
+        },
+      },
+      {
+        $unwind: {
+          path: "$subscriptions",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          username: 1,
+          name: 1,
+          phone: 1,
+          height: 1,
+          weight: 1,
+          gender: 1,
+          email: 1,
+          address: 1,
+          age: 1,
+          subscription: "$subscriptions.name",
+          start_date: "$subscriptions.start_date",
+          end_date: "$subscriptions.end_date",
+          subscriptionId: "$subscriptions.membership_id",
+        },
+      },
+    ]);
+    res.status(200).json(members);
+  } catch (err) {
+    res.status(500).json({ message: "Error retrieving Members", error: err });
+  }
+});
+
 // Fetch Membership
 app.get("/get-membership", async (req, res) => {
   try {

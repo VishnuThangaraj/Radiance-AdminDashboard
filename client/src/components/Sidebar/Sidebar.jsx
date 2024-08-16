@@ -73,13 +73,6 @@ const Sidebar = ({ userRole }) => {
 
   const trainerSidebar = [
     {
-      key: `sidebar-u1`,
-      label: "Dashboard",
-      value: "home",
-      icon: mdiSpeedometer,
-      color: "#8f60e5",
-    },
-    {
       key: `sidebar-u2`,
       label: "Members",
       value: "member",
@@ -147,7 +140,6 @@ const Sidebar = ({ userRole }) => {
                 data-aos-duration="300"
                 data-aos-delay={300 + 50 * index}
               >
-                {console.log(index)}
                 <div className="icon-container">
                   <Icon path={menu.icon} size={0.7} color={menu.color} />
                 </div>
@@ -157,7 +149,9 @@ const Sidebar = ({ userRole }) => {
           : trainerSidebar.map((menu) => (
               <div
                 key={menu.key}
-                className="sidebar-content"
+                className={`sidebar-content ${
+                  currentPath === menu.value ? "nav-active" : ""
+                }`}
                 onClick={() => handleItemClick(menu.value)}
               >
                 <div className="icon-container">

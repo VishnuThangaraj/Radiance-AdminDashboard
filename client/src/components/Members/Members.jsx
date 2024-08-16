@@ -15,7 +15,7 @@ import EditMemberForm from "../Forms/Member/EditMemberForm";
 import "./Members.scss";
 import html2pdf from "html2pdf.js";
 
-const Members = () => {
+const Members = ({ user }) => {
   const [members, setMembers] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [activeRow, setActiveRow] = useState(null);
@@ -35,15 +35,28 @@ const Members = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:6969/get-members")
-      .then((response) => response.json())
-      .then((data) => {
-        setMembers(data);
-      })
-      .catch((error) => console.error("Error fetching members data:", error));
+    if (user.role === "admin") {
+      fetch("http://localhost:6969/get-members")
+        .then((response) => response.json())
+        .then((data) => {
+          setMembers(data);
+        })
+        .catch((error) => console.error("Error fetching members data:", error));
+    } else {
+      fetch(`http://localhost:6969/get-members/trainer/${user.id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setMembers(data);
+        })
+        .catch((error) => console.error("Error fetching members data:", error));
+    }
   }, []);
 
   const handleDelete = async (id) => {
+    if (user.role !== "admin") {
+      showNotification("Permission Denied: Unable to Delete Member", "warning");
+      return;
+    }
     setDeletingRow(id);
     setTimeout(async () => {
       try {
@@ -69,11 +82,24 @@ const Members = () => {
   };
 
   const handleEdit = (id) => {
+    if (user.role !== "admin") {
+      showNotification("Permission Denied: Unable to Edit Member", "warning");
+      return;
+    }
     setEditMemberId(id);
   };
 
   const handleSaveEdit = () => {
     setEditMemberId(null);
+  };
+
+  const handleAddMember = () => {
+    if (user.role !== "admin") {
+      showNotification("Permission Denied: Unable to Add Member", "info");
+      return;
+    }
+
+    setShowForm(true);
   };
 
   const fetchAndGeneratePDF = async () => {
@@ -163,7 +189,7 @@ const Members = () => {
           <div
             id="add_mbr_btn"
             className="btn utl-btn"
-            onClick={() => setShowForm(true)}
+            onClick={handleAddMember}
             data-aos="zoom-in"
           >
             <Icon path={mdiAccountPlus} size={1} /> Add Member
