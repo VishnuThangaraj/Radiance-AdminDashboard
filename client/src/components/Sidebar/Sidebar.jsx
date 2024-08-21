@@ -15,7 +15,6 @@ import "./Sidebar.scss";
 
 const Sidebar = ({ userRole }) => {
   const navigate = useNavigate();
-  const [isReportOpen, setIsReportOpen] = useState(false);
   const currentPath = location.pathname.slice(1);
 
   const adminSidebar = [
