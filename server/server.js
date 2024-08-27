@@ -18,7 +18,7 @@ const bcrypt = require("bcryptjs");
 const moment = require("moment");
 
 const app = express();
-const port = process.env.PORT || 6969;
+const port = process.env.PORT;
 
 // Nodemailer configuration
 const transporter = nodemailer.createTransport({
@@ -31,7 +31,7 @@ const transporter = nodemailer.createTransport({
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI || "mongodb://localhost:27017/Radiance_Yoga", {
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -45,7 +45,7 @@ mongoose
 // CORS configuration
 app.use(
   cors({
-    origin: "http://localhost:5174",
+    origin: process.env.CLIENT_ORIGIN,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -144,7 +144,7 @@ app.post("/register-trainer", async (req, res) => {
 
     // Sending Mail (Replay)
     const mailOptions = {
-      from: `vishnuthangaraj.vedhanthi@gmail.com`,
+      from: process.env.EMAIL_USER,
       to: email,
       subject: `Welcome to Radiance Yoga Center | Your Trainer Registration Details`,
       html: `
@@ -288,7 +288,7 @@ app.post("/register-member", async (req, res) => {
 
     // Sending Mail (Styled HTML)
     const mailOptions = {
-      from: `vishnuthangaraj.vedhanthi@gmail.com`,
+      from: process.env.EMAIL_USER,
       to: email,
       subject: `Welcome to Radiance Yoga Center | Your Membership Details`,
       html: `
